@@ -1,0 +1,24 @@
+#!/bin/sh
+# Author: Vitaly Lipatov <lav@etersoft.ru>
+# 2006, Public domain
+
+# Print the distro version
+
+# You can set ROOTDIR to your root dir
+#ROOTDIR=
+
+if [ -f $ROOTDIR/etc/slackware-version ] ; then
+	echo "slackware"
+elif [ -f $ROOTDIR/etc/debian_version ] ; then
+	echo "debian"
+elif [ -f $ROOTDIR/etc/altlinux-release ] ; then
+	echo "alt"
+elif [ -f $ROOTDIR/etc/asplinux-release ] ; then
+	echo "asplinux"
+elif [ -f $ROOTDIR/etc/redhat-release ] ; then
+	echo "redhat"
+else
+	echo "generic"
+fi
+
+# TODO: Ubuntu, SuSe, MOPSLinux Fedora
