@@ -17,8 +17,11 @@ elif [ -f $ROOTDIR/etc/asplinux-release ] ; then
 	echo "asplinux"
 elif [ -f $ROOTDIR/etc/redhat-release ] ; then
 	echo "redhat"
+elif [ -f $ROOTDIR/etc/SuSe-release ] ; then
+	echo "suse"
 else
 	echo "generic"
 fi
 
-# TODO: Ubuntu, SuSe, MOPSLinux Fedora
+# TODO: Ubuntu, SuSe, MOPSLinux Fedora, Mandriva
+# TODO: check for release
