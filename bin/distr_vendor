@@ -6,8 +6,11 @@
 
 # You can set ROOTDIR to your root dir
 #ROOTDIR=
-
-if [ -f $ROOTDIR/etc/slackware-version ] ; then
+system_name()
+{
+if [ 'uname' = "FreeBSD" ] ; then
+	echo "freebsd"
+elif [ -f $ROOTDIR/etc/slackware-version ] ; then
 	echo "slackware"
 elif [ -f $ROOTDIR/etc/debian_version ] ; then
 	echo "debian"
@@ -19,9 +22,33 @@ elif [ -f $ROOTDIR/etc/redhat-release ] ; then
 	echo "redhat"
 elif [ -f $ROOTDIR/etc/SuSe-release ] ; then
 	echo "suse"
+elif [ -f $ROOTDIR/etc/Mandriva-release ] ; then
+	echo "mandriva"
+elif [ -f $ROOTDIR/etc/Mandrake-release ] ; then
+	echo "mandrake"
 else
 	echo "generic"
 fi
+}
+
+case $1 in
+	-p)
+		case `system_name` in
+			freebsd) echo "pkg" ;;
+			slackware|mopslinux) echo "tgz" ;;
+			debian|ubuntu) echo "deb" ;;
+			alt|asplinux|redhat|suse|madriva|mandrake) echo "rpm" ;;
+			*) echo "rpm" ;;
+		esac
+		exit 0
+		;;
+	-h)
+		echo "-p print type of packaging system"
+		echo "-h this help"
+		exit 0
+		;;
+	*) system_name ;;
+esac
 
 # TODO: Ubuntu, SuSe, MOPSLinux Fedora, Mandriva
 # TODO: check for release
