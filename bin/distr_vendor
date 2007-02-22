@@ -21,7 +21,11 @@ elif [ -f $ROOTDIR/etc/Mandriva-release ] ; then
 elif [ -f $ROOTDIR/etc/Mandrake-release ] ; then
 	echo "mandrake"
 elif [ -f $ROOTDIR/etc/asplinux-release ] ; then
-	echo "asplinux"
+	if grep Karelia $ROOTDIR/etc/asplinux-release >/dev/null 2>&1 ; then
+		echo "ASPLinux/10"
+	else
+		echo "asplinux"
+	fi
 elif [ -f $ROOTDIR/etc/redhat-release ] ; then
 	echo "redhat"
 elif [ -f $ROOTDIR/etc/SuSe-release ] ; then
