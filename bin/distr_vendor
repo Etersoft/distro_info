@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: Vitaly Lipatov <lav@etersoft.ru>
-# 2006, Public domain
+# 2006, 2007, Public domain
 
 # Print the distro version
 
@@ -16,16 +16,16 @@ elif [ -f $ROOTDIR/etc/debian_version ] ; then
 	echo "debian"
 elif [ -f $ROOTDIR/etc/altlinux-release ] ; then
 	echo "alt"
+elif [ -f $ROOTDIR/etc/Mandriva-release ] ; then
+	echo "mandriva"
+elif [ -f $ROOTDIR/etc/Mandrake-release ] ; then
+	echo "mandrake"
 elif [ -f $ROOTDIR/etc/asplinux-release ] ; then
 	echo "asplinux"
 elif [ -f $ROOTDIR/etc/redhat-release ] ; then
 	echo "redhat"
 elif [ -f $ROOTDIR/etc/SuSe-release ] ; then
 	echo "suse"
-elif [ -f $ROOTDIR/etc/Mandriva-release ] ; then
-	echo "mandriva"
-elif [ -f $ROOTDIR/etc/Mandrake-release ] ; then
-	echo "mandrake"
 else
 	echo "generic"
 fi
