@@ -26,6 +26,8 @@ elif [ -f $ROOTDIR/etc/redhat-release ] ; then
 	echo "redhat"
 elif [ -f $ROOTDIR/etc/SuSe-release ] ; then
 	echo "suse"
+elif [ -d $ROOTDIR/etc/YaST2 ] ; then
+	echo "suse"
 else
 	echo "generic"
 fi
