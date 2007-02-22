@@ -16,10 +16,10 @@ elif [ -f $ROOTDIR/etc/debian_version ] ; then
 	echo "debian"
 elif [ -f $ROOTDIR/etc/altlinux-release ] ; then
 	echo "alt"
-elif [ -f $ROOTDIR/etc/Mandriva-release ] ; then
+elif [ -f $ROOTDIR/etc/mandriva-release ] ; then
 	echo "mandriva"
-elif [ -f $ROOTDIR/etc/Mandrake-release ] ; then
-	echo "mandrake"
+elif [ -f $ROOTDIR/etc/mandrake-release ] ; then
+	echo "mandriva"
 elif [ -f $ROOTDIR/etc/asplinux-release ] ; then
 	if grep Karelia $ROOTDIR/etc/asplinux-release >/dev/null 2>&1 ; then
 		echo "ASPLinux/10"
