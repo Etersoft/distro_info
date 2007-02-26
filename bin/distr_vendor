@@ -45,7 +45,7 @@ case $1 in
 			freebsd) echo "pkg" ;;
 			slackware|mopslinux) echo "tgz" ;;
 			debian|ubuntu) echo "deb" ;;
-			alt|asplinux|redhat|suse|madriva|mandrake) echo "rpm" ;;
+			alt|asplinux|fedora|redhat|suse|madriva|mandrake) echo "rpm" ;;
 			*) echo "rpm" ;;
 		esac
 		exit 0
@@ -58,5 +58,5 @@ case $1 in
 	*) system_name ;;
 esac
 
-# TODO: Ubuntu, SuSe, MOPSLinux Fedora, Mandriva
+# TODO: Ubuntu, MOPSLinux, Fedora, Mandriva
 # TODO: check for release
