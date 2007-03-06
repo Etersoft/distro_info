@@ -10,6 +10,8 @@ system_name()
 {
 if [ 'uname' = "FreeBSD" ] ; then
 	echo "freebsd"
+elif [ -f $ROOTDIR/etc/gentoo-release ] ; then
+	echo "gentoo"
 elif [ -f $ROOTDIR/etc/slackware-version ] ; then
 	echo "slackware"
 elif [ -f $ROOTDIR/etc/debian_version ] ; then
@@ -43,7 +45,7 @@ case $1 in
 	-p)
 		case `system_name` in
 			freebsd) echo "pkg" ;;
-			slackware|mopslinux) echo "tgz" ;;
+			slackware|mopslinux|gentoo) echo "tgz" ;;
 			debian|ubuntu) echo "deb" ;;
 			alt|asplinux|fedora|redhat|suse|madriva|mandrake) echo "rpm" ;;
 			*) echo "rpm" ;;
