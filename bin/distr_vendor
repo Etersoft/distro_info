@@ -45,7 +45,8 @@ case $1 in
 	-p)
 		case `system_name` in
 			freebsd) echo "pkg" ;;
-			slackware|mopslinux|gentoo) echo "tgz" ;;
+			slackware|mopslinux) echo "tgz" ;;
+			gentoo) echo "tbz2" ;;
 			debian|ubuntu) echo "deb" ;;
 			alt|asplinux|fedora|redhat|suse|madriva|mandrake) echo "rpm" ;;
 			*) echo "rpm" ;;
