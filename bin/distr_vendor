@@ -163,6 +163,7 @@ case $1 in
 		echo "-d print distro name"
 		echo "-v print version of distro"
 		echo "-e print full name of distro (with version)"
+		echo "-s print name of distro for build system"
 		echo "-h this help"
 		exit 0
 		;;
@@ -174,14 +175,14 @@ case $1 in
 		check_system
 		echo $DISTRIB_RELEASE
 		;;
-	-e)
-		check_system
-		[ -n "$DISTRIB_RELEASE" ] && echo $DISTRIB_ID/$DISTRIB_RELEASE || echo $DISTRIB_ID
-		;;
-	*)
+	-s)
 		check_system
 		pkgvendor
 		exit 0
+		;;
+	*)
+		check_system
+		[ -n "$DISTRIB_RELEASE" ] && echo $DISTRIB_ID/$DISTRIB_RELEASE || echo $DISTRIB_ID
 		;;
 esac
 
