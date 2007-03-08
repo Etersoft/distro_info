@@ -1,49 +1,154 @@
 #!/bin/sh
 # Author: Vitaly Lipatov <lav@etersoft.ru>
-# 2006, 2007, Public domain
+# 2007 (c) Etersoft
+# 2007 Public domain
 
 # Print the distro version
+# Welcome to send updates!
 
 # You can set ROOTDIR to your root dir
 #ROOTDIR=
-system_name()
+# TODO: /bin/lsb_release
+
+# Check for DISTRO specific file in /etc
+distro()
 {
+	DISTROFILE=$ROOTDIR/etc/$1
+	[ -f $DISTROFILE ] && return 0 || return 1
+}
+
+# Has DISTRO file specified word?
+has()
+{
+	[ -z "$DISTROFILE" ] && exit 1
+	grep "$1" "$DISTROFILE" >/dev/null 2>&1
+	return $?
+}
+
+# Print DISTRIB_ID name in package manner
+pkgvendor()
+{
+	[ "$DISTRIB_ID" = "ALTLinux" ] && echo "alt" && return
+	echo $DISTRIB_ID | tr [A-Z] [a-z]
+}
+
+get_var()
+{
+	grep -i "^$1 *=" | head -n 1 | sed -e "s/^[^=]*[ \t]*=[ \t]*//"
+
+}
+
+# Set DISTRIB_ID
+check_system()
+{
+# try use standart LSB info
+if distro lsb-release ; then
+	DISTRIB_ID=`cat $DISTROFILE | get_var DISTRIB_ID`
+	DISTRIB_RELEASE=`cat $DISTROFILE | get_var DISTRIB_RELEASE`
+	[ -n "$DISTRIB_ID" ] && [ -n "$DISTRIB_RELEASE" ] && return
+fi
+# default
+DISTRIB_ID="Generic"
+DISTRIB_RELEASE=""
+
 if [ 'uname' = "FreeBSD" ] ; then
-	echo "freebsd"
-elif [ -f $ROOTDIR/etc/gentoo-release ] ; then
-	echo "gentoo"
-elif [ -f $ROOTDIR/etc/slackware-version ] ; then
-	echo "slackware"
-elif [ -f $ROOTDIR/etc/debian_version ] ; then
-	echo "debian"
-elif [ -f $ROOTDIR/etc/altlinux-release ] ; then
-	echo "alt"
-elif [ -f $ROOTDIR/etc/mandriva-release ] ; then
-	echo "mandriva"
-elif [ -f $ROOTDIR/etc/mandrake-release ] ; then
-	echo "mandriva"
-elif [ -f $ROOTDIR/etc/asplinux-release ] ; then
-	if grep Karelia $ROOTDIR/etc/asplinux-release >/dev/null 2>&1 ; then
-		echo "ASPLinux/10"
-	else
-		echo "asplinux"
+	DISTRIB_ID="FreeBSD"
+elif distro gentoo-release ; then
+	DISTRIB_ID="Gentoo"
+	readlink $ROOTDIR/etc/make.profile | grep 2006.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2006.1"
+
+# Slackware based
+elif distro mopslinux-version ; then
+	DISTRIB_ID="MOPSLinux"
+	if   has 4.0 ; then DISTRIB_RELEASE="4.0"
+	elif has 5.0 ; then DISTRIB_RELEASE="5.0"
 	fi
-elif [ -f $ROOTDIR/etc/redhat-release ] ; then
-	echo "redhat"
-elif [ -f $ROOTDIR/etc/SuSe-release ] ; then
-	echo "suse"
-elif [ -f $ROOTDIR/etc/SuSE-release ] ; then
-	echo "suse"
-elif [ -d $ROOTDIR/etc/YaST2 ] ; then
-	echo "suse"
-else
-	echo "generic"
+elif distro slackware-version ; then
+	DISTRIB_ID="Slackware"
+	if   has 10.2 ; then DISTRIB_RELEASE="10.2"
+	elif has 11 ; then DISTRIB_RELEASE="11"
+	fi
+
+# Debian based
+elif distro debian_version ; then
+	DISTRIB_ID="Debian"
+	DISTRIB_RELEASE=`cat $DISTROFILE`
+# Ubuntu uses LSB
+
+# ALT Linux based
+elif distro altlinux-release ; then
+	DISTRIB_ID="ALTLinux"
+	if has Strawberry ; then DISTRIB_RELEASE="2.3"
+	elif has Citron   ; then DISTRIB_RELEASE="2.4"
+	elif has 20050723 ; then DISTRIB_RELEASE="3.0"
+	elif has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
+	fi
+
+# Mandriva based
+elif distro mandriva-release || distro mandrake-release ; then
+	DISTRIB_ID="Mandriva"
+	if   has 2005 ; then DISTRIB_RELEASE="2005"
+	elif has 2006 ; then DISTRIB_RELEASE="2006"
+	elif has 2007 ; then DISTRIB_RELEASE="2007"
+	fi
+# make old as generic
+#elif distro mandrake-release ; then
+#	DISTRIB_ID="Mandriva"
+
+# Fedora based
+elif distro linux-xp-release ; then
+	DISTRIB_ID="LinuxXP"
+	if has "Attack of the Clones" ; then DISTRIB_RELEASE="2006"
+	fi
+
+elif distro asplinux-release ; then
+	DISTRIB_ID="ASPLinux"
+	if   has Karelia ; then DISTRIB_RELEASE="10"
+	elif has Seliger ; then DISTRIB_RELEASE="11"
+	fi
+
+elif distro MCBC-release ; then
+	DISTRIB_ID="MCBC"
+	if   has 3.0 ; then DISTRIB_RELEASE="3.0"
+	fi
+
+elif distro fedora-release ; then
+	DISTRIB_ID="FedoraCore"
+	if   has Stentz ; then DISTRIB_RELEASE="4"
+	elif has Bordeaux ; then DISTRIB_RELEASE="5"
+	elif has Zod ; then DISTRIB_RELEASE="6"
+	fi
+
+elif distro redhat-release ; then
+	DISTRIB_ID="RHEL"
+	if has Beryllium ; then
+		DISTRIB_ID="Scientific"
+		DISTRIB_RELEASE="4.1"
+	elif has Shrike ; then
+		DISTRIB_ID="RedHat"
+		DISTRIB_RELEASE="9"
+	elif has Taroon ; then 	DISTRIB_RELEASE="3"
+	fi
+
+# SUSE based
+elif distro SuSe-release || distro SuSE-release ; then
+	DISTRIB_ID="SUSE"
+	if  has "Desktop 9" ; then
+		DISTRIB_ID="NLD"
+		DISTRIB_RELEASE="9"
+	elif has "10.1" ; then DISTRIB_RELEASE="10.1"
+	elif has "10" ; then DISTRIB_RELEASE="10"
+	fi
+#elif [ -d $ROOTDIR/etc/YaST2 ] ; then
+#	DISTRIB_ID="SUSE"
 fi
 }
 
+
 case $1 in
 	-p)
-		case `system_name` in
+		check_system
+		case `pkgvendor` in
 			freebsd) echo "pkg" ;;
 			slackware|mopslinux) echo "tgz" ;;
 			gentoo) echo "tbz2" ;;
@@ -55,11 +160,28 @@ case $1 in
 		;;
 	-h)
 		echo "-p print type of packaging system"
+		echo "-d print distro name"
+		echo "-v print version of distro"
+		echo "-e print full name of distro (with version)"
 		echo "-h this help"
 		exit 0
 		;;
-	*) system_name ;;
+	-d)
+		check_system
+		echo $DISTRIB_ID
+		;;
+	-v)
+		check_system
+		echo $DISTRIB_RELEASE
+		;;
+	-e)
+		check_system
+		[ -n "$DISTRIB_RELEASE" ] && echo $DISTRIB_ID/$DISTRIB_RELEASE || echo $DISTRIB_ID
+		;;
+	*)
+		check_system
+		pkgvendor
+		exit 0
+		;;
 esac
 
-# TODO: Ubuntu, MOPSLinux, Fedora, Mandriva
-# TODO: check for release
