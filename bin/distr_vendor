@@ -148,6 +148,7 @@ fi
 case $1 in
 	-p)
 		check_system
+		test -n "$2" && DISTRIB_ID=$2
 		case `pkgvendor` in
 			freebsd) echo "pkg" ;;
 			slackware|mopslinux) echo "tgz" ;;
