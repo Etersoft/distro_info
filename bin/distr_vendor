@@ -51,8 +51,16 @@ fi
 DISTRIB_ID="Generic"
 DISTRIB_RELEASE=""
 
-if [ 'uname' = "FreeBSD" ] ; then
+if [ `uname` = "FreeBSD" ] ; then
 	DISTRIB_ID="FreeBSD"
+	if uname -a | grep 6.0-RELEASE >/dev/null ; then
+		DISTRIB_RELEASE=6.0
+	elif uname -a | grep 6.1-RELEASE >/dev/null ; then
+		DISTRIB_RELEASE=6.1
+	elif uname -a | grep 6.2-RELEASE >/dev/null ; then
+		DISTRIB_RELEASE=6.2
+	fi
+
 elif distro gentoo-release ; then
 	DISTRIB_ID="Gentoo"
 	readlink $ROOTDIR/etc/make.profile | grep 2006.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2006.1"
