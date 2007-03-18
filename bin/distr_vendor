@@ -59,11 +59,15 @@ if [ `uname` = "FreeBSD" ] ; then
 		DISTRIB_RELEASE=6.1
 	elif uname -a | grep 6.2-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=6.2
+	elif uname -a | grep 6.3-RELEASE >/dev/null ; then
+		DISTRIB_RELEASE=6.3
 	fi
 
 elif distro gentoo-release ; then
 	DISTRIB_ID="Gentoo"
 	readlink $ROOTDIR/etc/make.profile | grep 2006.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2006.1"
+	readlink $ROOTDIR/etc/make.profile | grep 2006.2 >/dev/null 2>&1 && DISTRIB_RELEASE="2006.2"
+	readlink $ROOTDIR/etc/make.profile | grep 2007.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2007.1"
 
 # Slackware based
 elif distro mopslinux-version ; then
@@ -75,12 +79,14 @@ elif distro slackware-version ; then
 	DISTRIB_ID="Slackware"
 	if   has 10.2 ; then DISTRIB_RELEASE="10.2"
 	elif has 11 ; then DISTRIB_RELEASE="11"
+	elif has 11.1 ; then DISTRIB_RELEASE="11.1"
 	fi
 
 # Debian based
 elif distro debian_version ; then
 	DISTRIB_ID="Debian"
 	DISTRIB_RELEASE=`cat $DISTROFILE`
+
 # Ubuntu uses LSB
 
 # ALT Linux based
@@ -145,6 +151,7 @@ elif distro SuSe-release || distro SuSE-release ; then
 		DISTRIB_ID="NLD"
 		DISTRIB_RELEASE="9"
 	elif has "10.1" ; then DISTRIB_RELEASE="10.1"
+	elif has "10.2" ; then DISTRIB_RELEASE="10.2"
 	elif has "10" ; then DISTRIB_RELEASE="10"
 	fi
 #elif [ -d $ROOTDIR/etc/YaST2 ] ; then
