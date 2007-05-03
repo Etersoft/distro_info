@@ -41,12 +41,14 @@ get_var()
 # Set DISTRIB_ID
 check_system()
 {
-# try use standart LSB info
+
+# try use standart LSB info (f.e. Ubuntu)
 if distro lsb-release ; then
 	DISTRIB_ID=`cat $DISTROFILE | get_var DISTRIB_ID`
 	DISTRIB_RELEASE=`cat $DISTROFILE | get_var DISTRIB_RELEASE`
 	[ -n "$DISTRIB_ID" ] && [ -n "$DISTRIB_RELEASE" ] && return
 fi
+
 # default
 DISTRIB_ID="Generic"
 DISTRIB_RELEASE=""
@@ -87,7 +89,7 @@ elif distro debian_version ; then
 	DISTRIB_ID="Debian"
 	DISTRIB_RELEASE=`cat $DISTROFILE`
 
-# Ubuntu uses LSB
+# Ubuntu uses LSB, skipping
 
 # ALT Linux based
 elif distro altlinux-release ; then
