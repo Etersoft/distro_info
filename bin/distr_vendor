@@ -97,15 +97,23 @@ elif distro altlinux-release ; then
 	if has Strawberry ; then DISTRIB_RELEASE="2.3"
 	elif has Citron   ; then DISTRIB_RELEASE="2.4"
 	elif has 20050723 ; then DISTRIB_RELEASE="3.0"
+	elif has 4.0      ; then DISTRIB_RELEASE="4.0" # Walnut
 	elif has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	fi
 
 # Mandriva based
+elif distro pclinuxos-release ; then
+	DISTRIB_ID="PCLinux"
+	if   has "2007" ; then DISTRIB_RELEASE="2007"
+	elif has "2008" ; then DISTRIB_RELEASE="2008"
+	fi
+
 elif distro mandriva-release || distro mandrake-release ; then
 	DISTRIB_ID="Mandriva"
 	if   has 2005 ; then DISTRIB_RELEASE="2005"
 	elif has 2006 ; then DISTRIB_RELEASE="2006"
 	elif has 2007 ; then DISTRIB_RELEASE="2007"
+	elif has 2008 ; then DISTRIB_RELEASE="2008"
 	fi
 # make old as generic
 #elif distro mandrake-release ; then
@@ -133,10 +141,16 @@ elif distro fedora-release ; then
 	if   has Stentz ; then DISTRIB_RELEASE="4"
 	elif has Bordeaux ; then DISTRIB_RELEASE="5"
 	elif has Zod ; then DISTRIB_RELEASE="6"
+	elif has Moonshine ; then DISTRIB_RELEASE="7"
 	fi
 
 elif distro redhat-release ; then
 	DISTRIB_ID="RHEL"
+	if has CentOS ; then
+		DISTRIB_ID="CentOS"
+		if has "release 4" ; then DISTRIB_RELEASE="4"
+		elif has "release 5" ; then DISTRIB_RELEASE="5"
+		fi
 	if has Beryllium ; then
 		DISTRIB_ID="Scientific"
 		DISTRIB_RELEASE="4.1"
