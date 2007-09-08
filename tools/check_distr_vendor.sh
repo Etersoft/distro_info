@@ -1,4 +1,5 @@
 #!/bin/sh
+# Check detection code in OS root tree
 OS=/net/os/unstable
 cd $OS
 export DISTR_LIST=`find -L -maxdepth 2 -mindepth 2 -type d | sed -e "s|^./||" | sort | grep -v Windows`

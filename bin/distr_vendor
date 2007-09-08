@@ -56,6 +56,7 @@ if distro altlinux-release ; then
 	elif has Citron   ; then DISTRIB_RELEASE="2.4"
 	elif has 20050723 ; then DISTRIB_RELEASE="3.0"
 	elif has Walnut   ; then DISTRIB_RELEASE="4.0"
+	elif has Desktop  ; then DISTRIB_RELEASE="4.0"
 	elif has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	fi
 
@@ -90,12 +91,15 @@ elif distro mopslinux-version ; then
 	DISTRIB_ID="MOPSLinux"
 	if   has 4.0 ; then DISTRIB_RELEASE="4.0"
 	elif has 5.0 ; then DISTRIB_RELEASE="5.0"
+	elif has 5.1 ; then DISTRIB_RELEASE="5.1"
+	elif has 6.0 ; then DISTRIB_RELEASE="6.0"
 	fi
 elif distro slackware-version ; then
 	DISTRIB_ID="Slackware"
 	if   has 10.2 ; then DISTRIB_RELEASE="10.2"
 	elif has 11 ; then DISTRIB_RELEASE="11"
 	elif has 11.1 ; then DISTRIB_RELEASE="11.1"
+	elif has 12 ; then DISTRIB_RELEASE="12"
 	fi
 
 # Debian based
@@ -128,6 +132,7 @@ elif distro linux-xp-release ; then
 	DISTRIB_ID="LinuxXP"
 	if has "Attack of the Clones" ; then DISTRIB_RELEASE="2006"
 	elif has "2007" ; then DISTRIB_RELEASE="2007"
+	elif has "2008" ; then DISTRIB_RELEASE="2008"
 	fi
 
 elif distro asplinux-release ; then
@@ -136,6 +141,7 @@ elif distro asplinux-release ; then
 	elif has Seliger ; then DISTRIB_RELEASE="11"
 	elif has "11.1" ; then DISTRIB_RELEASE="11.1"
 	elif has "11.2" ; then DISTRIB_RELEASE="11.2"
+	elif has "12" ; then DISTRIB_RELEASE="12"
 	fi
 
 elif distro MCBC-release ; then
@@ -156,7 +162,7 @@ elif distro redhat-release ; then
 	DISTRIB_ID="RHEL"
 	if has CentOS ; then
 		DISTRIB_ID="CentOS"
-		if has "release 4" ; then DISTRIB_RELEASE="4"
+		if   has "release 4" ; then DISTRIB_RELEASE="4"
 		elif has "release 5" ; then DISTRIB_RELEASE="5"
 		fi
 	elif has Beryllium ; then
@@ -173,13 +179,14 @@ elif distro redhat-release ; then
 # SUSE based
 elif distro SuSe-release || distro SuSE-release ; then
 	DISTRIB_ID="SUSE"
-	if  has "Desktop 9" ; then
+	if   has "Desktop 9" ; then
 		DISTRIB_ID="NLD"
 		DISTRIB_RELEASE="9"
 	elif has "10.1" ; then DISTRIB_RELEASE="10.1"
 	elif has "10.2" ; then DISTRIB_RELEASE="10.2"
 	elif has "10.3" ; then DISTRIB_RELEASE="10.3"
 	elif has "10" ; then DISTRIB_RELEASE="10"
+	elif has "11" ; then DISTRIB_RELEASE="11"
 	fi
 fi
 
@@ -196,7 +203,7 @@ case $1 in
 				echo "rpm" ;;
 			fedora|redhat|scientific|centos|rhel)
 				echo "rpm" ;;
-			*) echo "rpm" ;;
+			*)  echo "rpm" ;;
 		esac
 		exit 0
 		;;
