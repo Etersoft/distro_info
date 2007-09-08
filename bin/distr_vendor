@@ -140,6 +140,7 @@ elif distro asplinux-release ; then
 	if   has Karelia ; then DISTRIB_RELEASE="10"
 	elif has Seliger ; then DISTRIB_RELEASE="11"
 	elif has "11.1" ; then DISTRIB_RELEASE="11.1"
+	elif has Ladoga ; then DISTRIB_RELEASE="11.2"
 	elif has "11.2" ; then DISTRIB_RELEASE="11.2"
 	elif has "12" ; then DISTRIB_RELEASE="12"
 	fi
