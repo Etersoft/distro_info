@@ -151,7 +151,7 @@ elif distro MCBC-release ; then
 	fi
 
 elif distro fedora-release ; then
-	DISTRIB_ID="FedoraCore"
+	DISTRIB_ID="Fedora"
 	if   has Stentz ; then DISTRIB_RELEASE="4"
 	elif has Bordeaux ; then DISTRIB_RELEASE="5"
 	elif has Zod ; then DISTRIB_RELEASE="6"
