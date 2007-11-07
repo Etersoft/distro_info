@@ -60,11 +60,6 @@ if distro altlinux-release ; then
 	elif has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	fi
 
-# try use standart LSB info (f.e. Ubuntu)
-elif distro lsb-release && [ -n "$DISTRIB_RELEASE" ]; then
-	# use LSB
-	true
-
 elif [ `uname` = "FreeBSD" ] ; then
 	DISTRIB_ID="FreeBSD"
 	if uname -a | grep 6.0-RELEASE >/dev/null ; then
@@ -102,12 +97,16 @@ elif distro slackware-version ; then
 	elif has 12 ; then DISTRIB_RELEASE="12"
 	fi
 
+# for Ubuntu use standard LSB info
+elif [ "$DISTRIB_ID" = "Ubuntu" ] && [ -n "$DISTRIB_RELEASE" ]; then
+	# use LSB version
+	true
+
 # Debian based
 elif distro debian_version ; then
 	DISTRIB_ID="Debian"
 	DISTRIB_RELEASE=`cat $DISTROFILE`
 
-# Ubuntu uses LSB, skipping
 
 # Mandriva based
 elif distro pclinuxos-release ; then
@@ -128,7 +127,7 @@ elif distro mandriva-release || distro mandrake-release ; then
 #	DISTRIB_ID="Mandriva"
 
 # Fedora based
-elif distro linux-xp-release ; then
+elif distro linux-xp-release || distro lxp-release; then
 	DISTRIB_ID="LinuxXP"
 	if has "Attack of the Clones" ; then DISTRIB_RELEASE="2006"
 	elif has "2007" ; then DISTRIB_RELEASE="2007"
@@ -157,6 +156,7 @@ elif distro fedora-release ; then
 	elif has Bordeaux ; then DISTRIB_RELEASE="5"
 	elif has Zod ; then DISTRIB_RELEASE="6"
 	elif has Moonshine ; then DISTRIB_RELEASE="7"
+	elif has Moons???hine ; then DISTRIB_RELEASE="8"
 	fi
 
 elif distro redhat-release ; then
@@ -186,9 +186,15 @@ elif distro SuSe-release || distro SuSE-release ; then
 	elif has "10.1" ; then DISTRIB_RELEASE="10.1"
 	elif has "10.2" ; then DISTRIB_RELEASE="10.2"
 	elif has "10.3" ; then DISTRIB_RELEASE="10.3"
+	elif has "10.4" ; then DISTRIB_RELEASE="10.4"
 	elif has "10" ; then DISTRIB_RELEASE="10"
 	elif has "11" ; then DISTRIB_RELEASE="11"
 	fi
+
+# try use standart LSB info
+elif distro lsb-release && [ -n "$DISTRIB_RELEASE" ]; then
+	# use LSB
+	true
 fi
 
 case $1 in
