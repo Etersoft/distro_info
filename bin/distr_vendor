@@ -29,6 +29,7 @@ has()
 pkgvendor()
 {
 	[ "$DISTRIB_ID" = "ALTLinux" ] && echo "alt" && return
+	[ "$DISTRIB_ID" = "LinuxXP" ] && echo "lxp" && return
 	echo "$DISTRIB_ID" | tr [A-Z] [a-z]
 }
 
