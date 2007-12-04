@@ -209,7 +209,7 @@ case $1 in
 		test -n "$2" && DISTRIB_ID=$2
 		case `pkgvendor` in
 			freebsd) echo "pkg" ;;
-			slackware|mopslinux) echo "tgz" ;;
+			slackware|mopslinux|archlinux) echo "tgz" ;;
 			gentoo) echo "tbz2" ;;
 			debian|ubuntu) echo "deb" ;;
 			alt|asplinux|suse|madriva|mandrake|pclinux)
