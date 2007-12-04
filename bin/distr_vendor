@@ -99,6 +99,10 @@ elif distro slackware-version ; then
 	elif has 12 ; then DISTRIB_RELEASE="12"
 	fi
 
+elif distro arch-release ; then
+	DISTRIB_ID="ArchLinux"
+	DISTRIB_RELEASE="2007"
+
 # for Ubuntu use standard LSB info
 elif [ "$DISTRIB_ID" = "Ubuntu" ] && [ -n "$DISTRIB_RELEASE" ]; then
 	# use LSB version
