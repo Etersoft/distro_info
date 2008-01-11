@@ -57,6 +57,8 @@ if distro altlinux-release ; then
 	if has Strawberry ; then DISTRIB_RELEASE="2.3"
 	elif has Citron   ; then DISTRIB_RELEASE="2.4"
 	elif has 20050723 ; then DISTRIB_RELEASE="3.0"
+	elif has Ajuga    ; then DISTRIB_RELEASE="4.0"
+	elif has 20070810 ; then DISTRIB_RELEASE="4.0"
 	elif has Walnut   ; then DISTRIB_RELEASE="4.0"
 	elif has Desktop  ; then DISTRIB_RELEASE="4.0"
 	elif has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
