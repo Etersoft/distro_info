@@ -76,6 +76,8 @@ elif [ `uname` = "FreeBSD" ] ; then
 		DISTRIB_RELEASE=6.3
 	elif uname -a | grep 7.0-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=7.0
+	elif uname -a | grep 7.1-RELEASE >/dev/null ; then
+		DISTRIB_RELEASE=7.1
 	fi
 
 elif distro gentoo-release ; then
@@ -84,6 +86,7 @@ elif distro gentoo-release ; then
 	readlink $ROOTDIR/etc/make.profile | grep 2006.2 >/dev/null 2>&1 && DISTRIB_RELEASE="2006.2"
 	readlink $ROOTDIR/etc/make.profile | grep 2007.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2007.1"
 	readlink $ROOTDIR/etc/make.profile | grep 2007.2 >/dev/null 2>&1 && DISTRIB_RELEASE="2007.2"
+	readlink $ROOTDIR/etc/make.profile | grep 2008.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2008.1"
 
 # Slackware based
 elif distro mopslinux-version ; then
@@ -92,6 +95,7 @@ elif distro mopslinux-version ; then
 	elif has 5.0 ; then DISTRIB_RELEASE="5.0"
 	elif has 5.1 ; then DISTRIB_RELEASE="5.1"
 	elif has 6.0 ; then DISTRIB_RELEASE="6.0"
+	elif has 6.1 ; then DISTRIB_RELEASE="6.1"
 	fi
 elif distro slackware-version ; then
 	DISTRIB_ID="Slackware"
@@ -165,6 +169,7 @@ elif distro fedora-release ; then
 	elif has Zod ; then DISTRIB_RELEASE="6"
 	elif has Moonshine ; then DISTRIB_RELEASE="7"
 	elif has Werewolf ; then DISTRIB_RELEASE="8"
+	elif has Sulphur ; then DISTRIB_RELEASE="9"
 	fi
 
 elif distro redhat-release ; then
@@ -196,6 +201,7 @@ elif distro SuSe-release || distro SuSE-release ; then
 	elif has "10.3" ; then DISTRIB_RELEASE="10.3"
 	elif has "10.4" ; then DISTRIB_RELEASE="10.4"
 	elif has "10" ; then DISTRIB_RELEASE="10"
+	elif has "11.1" ; then DISTRIB_RELEASE="11.1"
 	elif has "11" ; then DISTRIB_RELEASE="11"
 	fi
 
