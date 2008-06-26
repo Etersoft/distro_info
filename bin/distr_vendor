@@ -13,16 +13,16 @@
 # Check for DISTRO specific file in /etc
 distro()
 {
-	DISTROFILE=$ROOTDIR/etc/$1
-	[ -f $DISTROFILE ] && return 0 || return 1
+	# fill global DISTROFILE
+	DISTROFILE="$ROOTDIR/etc/$1"
+	[ -f "$DISTROFILE" ]
 }
 
 # Has DISTRO file specified word?
 has()
 {
-	[ -z "$DISTROFILE" ] && exit 1
+	[ -n "$DISTROFILE" ] || exit 1
 	grep "$1" "$DISTROFILE" >/dev/null 2>&1
-	return $?
 }
 
 # Print DISTRIB_ID name in package manner
@@ -48,7 +48,6 @@ DISTRIB_RELEASE=""
 if distro lsb-release ; then
 	DISTRIB_ID=`cat $DISTROFILE | get_var DISTRIB_ID`
 	DISTRIB_RELEASE=`cat $DISTROFILE | get_var DISTRIB_RELEASE`
-	true
 fi
 
 # ALT Linux based
@@ -214,7 +213,7 @@ fi
 case $1 in
 	-p)
 		# overrider DISTRIB_ID
-		test -n "$2" && DISTRIB_ID=$2
+		test -n "$2" && DISTRIB_ID="$2"
 		case `pkgvendor` in
 			freebsd) echo "pkg" ;;
 			slackware|mopslinux) echo "tgz" ;;
