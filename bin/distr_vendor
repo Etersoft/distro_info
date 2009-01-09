@@ -132,6 +132,7 @@ elif distro mandriva-release || distro mandrake-release ; then
 	elif has 2006 ; then DISTRIB_RELEASE="2006"
 	elif has 2007 ; then DISTRIB_RELEASE="2007"
 	elif has 2008 ; then DISTRIB_RELEASE="2008"
+	elif has 2009 ; then DISTRIB_RELEASE="2009"
 	fi
 # make old as generic
 #elif distro mandrake-release ; then
@@ -153,6 +154,7 @@ elif distro asplinux-release ; then
 	elif has Ladoga ; then DISTRIB_RELEASE="11.2"
 	elif has "11.2" ; then DISTRIB_RELEASE="11.2"
 	elif has "12" ; then DISTRIB_RELEASE="12"
+	elif has "13" ; then DISTRIB_RELEASE="13"
 	fi
 
 elif distro MCBC-release ; then
@@ -169,6 +171,7 @@ elif distro fedora-release ; then
 	elif has Moonshine ; then DISTRIB_RELEASE="7"
 	elif has Werewolf ; then DISTRIB_RELEASE="8"
 	elif has Sulphur ; then DISTRIB_RELEASE="9"
+	elif has Cambridge ; then DISTRIB_RELEASE="10"
 	fi
 
 elif distro redhat-release ; then
@@ -202,6 +205,7 @@ elif distro SuSe-release || distro SuSE-release ; then
 	elif has "10" ; then DISTRIB_RELEASE="10"
 	elif has "11.1" ; then DISTRIB_RELEASE="11.1"
 	elif has "11" ; then DISTRIB_RELEASE="11"
+	elif has "12" ; then DISTRIB_RELEASE="12"
 	fi
 
 # try use standart LSB info
