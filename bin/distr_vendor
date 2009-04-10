@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: Vitaly Lipatov <lav@etersoft.ru>
-# 2007 (c) Etersoft
+# 2007, 2009 (c) Etersoft
 # 2007 Public domain
 
 # Print the distro version
@@ -59,6 +59,7 @@ if distro altlinux-release ; then
 	elif has Ajuga    ; then DISTRIB_RELEASE="4.0"
 	elif has 20070810 ; then DISTRIB_RELEASE="4.0"
 	elif has Walnut   ; then DISTRIB_RELEASE="4.0"
+	elif has 5.0      ; then DISTRIB_RELEASE="5.0"
 	elif has Desktop  ; then DISTRIB_RELEASE="4.0"
 	elif has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	fi
@@ -77,6 +78,8 @@ elif [ `uname` = "FreeBSD" ] ; then
 		DISTRIB_RELEASE=7.0
 	elif uname -a | grep 7.1-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=7.1
+	elif uname -a | grep 7.3-RELEASE >/dev/null ; then
+		DISTRIB_RELEASE=7.3
 	fi
 
 elif distro gentoo-release ; then
@@ -85,7 +88,9 @@ elif distro gentoo-release ; then
 	readlink $ROOTDIR/etc/make.profile | grep 2006.2 >/dev/null 2>&1 && DISTRIB_RELEASE="2006.2"
 	readlink $ROOTDIR/etc/make.profile | grep 2007.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2007.1"
 	readlink $ROOTDIR/etc/make.profile | grep 2007.2 >/dev/null 2>&1 && DISTRIB_RELEASE="2007.2"
+	readlink $ROOTDIR/etc/make.profile | grep 2008.0 >/dev/null 2>&1 && DISTRIB_RELEASE="2008.0"
 	readlink $ROOTDIR/etc/make.profile | grep 2008.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2008.1"
+	readlink $ROOTDIR/etc/make.profile | grep 2009.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2009.1"
 
 # Slackware based
 elif distro mopslinux-version ; then
@@ -133,6 +138,7 @@ elif distro mandriva-release || distro mandrake-release ; then
 	elif has 2007 ; then DISTRIB_RELEASE="2007"
 	elif has 2008 ; then DISTRIB_RELEASE="2008"
 	elif has 2009 ; then DISTRIB_RELEASE="2009"
+	elif has 2010 ; then DISTRIB_RELEASE="2010"
 	fi
 # make old as generic
 #elif distro mandrake-release ; then
@@ -144,6 +150,7 @@ elif distro linux-xp-release || distro lxp-release; then
 	if has "Attack of the Clones" ; then DISTRIB_RELEASE="2006"
 	elif has "2007" ; then DISTRIB_RELEASE="2007"
 	elif has "2008" ; then DISTRIB_RELEASE="2008"
+	elif has "2009" ; then DISTRIB_RELEASE="2009"
 	fi
 
 elif distro asplinux-release ; then
@@ -155,6 +162,8 @@ elif distro asplinux-release ; then
 	elif has "11.2" ; then DISTRIB_RELEASE="11.2"
 	elif has "12" ; then DISTRIB_RELEASE="12"
 	elif has "13" ; then DISTRIB_RELEASE="13"
+	elif has "14" ; then DISTRIB_RELEASE="14"
+	elif has "15" ; then DISTRIB_RELEASE="15"
 	fi
 
 elif distro MCBC-release ; then
