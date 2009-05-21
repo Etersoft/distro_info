@@ -25,6 +25,15 @@ has()
 	grep "$1" "$DISTROFILE" >/dev/null 2>&1
 }
 
+# Translate DISTRIB_ID in vendor name
+rpmvendor()
+{
+	[ "$DISTRIB_ID" = "ALTLinux" ] && echo "alt" && return
+	[ "$DISTRIB_ID" = "LinuxXP" ] && echo "lxp" && return
+#	[ "$DISTRIB_ID" = "Mandriva" ] && echo "mdv" && return
+	echo "$DISTRIB_ID" | tr [A-Z] [a-z]
+}
+
 # Print DISTRIB_ID name in package manner
 pkgvendor()
 {
@@ -184,6 +193,8 @@ elif distro fedora-release ; then
 	fi
 
 elif distro redhat-release ; then
+	# FIXME if need
+	# actually in the original RHEL: Red Hat Enterprise Linux .. release N
 	DISTRIB_ID="RHEL"
 	if has CentOS ; then
 		DISTRIB_ID="CentOS"
@@ -245,8 +256,9 @@ case $1 in
 		echo "-p print type of packaging system"
 		echo "-d print distro name"
 		echo "-v print version of distro"
-		echo "-e print full name of distro (with version)"
+		echo "-e print full name of distro with version (by default)"
 		echo "-s print name of distro for build system"
+		echo "-n print vendor name (as _vendor macros in rpm)"
 		echo "-h this help"
 		exit 0
 		;;
@@ -258,6 +270,10 @@ case $1 in
 		;;
 	-s)
 		pkgvendor
+		exit 0
+		;;
+	-n)
+		rpmvendor
 		exit 0
 		;;
 	*)
