@@ -190,6 +190,8 @@ elif distro fedora-release ; then
 	elif has Werewolf ; then DISTRIB_RELEASE="8"
 	elif has Sulphur ; then DISTRIB_RELEASE="9"
 	elif has Cambridge ; then DISTRIB_RELEASE="10"
+	elif has "release 11" ; then DISTRIB_RELEASE="11"
+	elif has "release 12" ; then DISTRIB_RELEASE="12"
 	fi
 
 elif distro redhat-release ; then
