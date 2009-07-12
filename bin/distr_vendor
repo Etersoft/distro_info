@@ -13,6 +13,7 @@
 # Check for DISTRO specific file in /etc
 distro()
 {
+	[ -n "$ROOTDIR" ] || return
 	# fill global DISTROFILE
 	DISTROFILE="$ROOTDIR/etc/$1"
 	[ -f "$DISTROFILE" ]
@@ -73,21 +74,23 @@ if distro altlinux-release ; then
 	elif has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	fi
 
+# fixme: can we detect by some file?
 elif [ `uname` = "FreeBSD" ] ; then
 	DISTRIB_ID="FreeBSD"
-	if uname -a | grep 6.0-RELEASE >/dev/null ; then
+	UNAME=$(uname -a)
+	if echo $UNAME | grep 6.0-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=6.0
-	elif uname -a | grep 6.1-RELEASE >/dev/null ; then
+	elif echo $UNAME | grep 6.1-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=6.1
-	elif uname -a | grep 6.2-RELEASE >/dev/null ; then
+	elif echo $UNAME | grep 6.2-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=6.2
-	elif uname -a | grep 6.3-RELEASE >/dev/null ; then
+	elif echo $UNAME | grep 6.3-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=6.3
-	elif uname -a | grep 7.0-RELEASE >/dev/null ; then
+	elif echo $UNAME | grep 7.0-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=7.0
-	elif uname -a | grep 7.1-RELEASE >/dev/null ; then
+	elif echo $UNAME | grep 7.1-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=7.1
-	elif uname -a | grep 7.3-RELEASE >/dev/null ; then
+	elif echo $UNAME | grep 7.3-RELEASE >/dev/null ; then
 		DISTRIB_RELEASE=7.3
 	fi
 
