@@ -13,7 +13,7 @@
 # Check for DISTRO specific file in /etc
 distro()
 {
-	[ -n "$ROOTDIR" ] || return
+	#[ -n "$ROOTDIR" ] || return
 	# fill global DISTROFILE
 	DISTROFILE="$ROOTDIR/etc/$1"
 	[ -f "$DISTROFILE" ]
