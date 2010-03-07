@@ -32,7 +32,7 @@ rpmvendor()
 	[ "$DISTRIB_ID" = "ALTLinux" ] && echo "alt" && return
 	[ "$DISTRIB_ID" = "LinuxXP" ] && echo "lxp" && return
 #	[ "$DISTRIB_ID" = "Mandriva" ] && echo "mdv" && return
-	echo "$DISTRIB_ID" | tr [A-Z] [a-z]
+	echo "$DISTRIB_ID" | tr "[A-Z]" "[a-z]"
 }
 
 # Print DISTRIB_ID name in package manner
@@ -41,7 +41,7 @@ pkgvendor()
 	[ "$DISTRIB_ID" = "ALTLinux" ] && echo "alt" && return
 	[ "$DISTRIB_ID" = "LinuxXP" ] && echo "lxp" && return
 	[ "$DISTRIB_ID" = "Mandriva" ] && echo "mdv" && return
-	echo "$DISTRIB_ID" | tr [A-Z] [a-z]
+	echo "$DISTRIB_ID" | tr "[A-Z]" "[a-z]"
 }
 
 get_var()
