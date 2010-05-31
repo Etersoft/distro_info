@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: Vitaly Lipatov <lav@etersoft.ru>
-# 2007, 2009 (c) Etersoft
+# 2007, 2009, 2010 (c) Etersoft
 # 2007 Public domain
 
 # Print the distro version
@@ -78,31 +78,11 @@ if distro altlinux-release ; then
 elif [ `uname` = "FreeBSD" ] ; then
 	DISTRIB_ID="FreeBSD"
 	UNAME=$(uname -a)
-	if echo $UNAME | grep 6.0-RELEASE >/dev/null ; then
-		DISTRIB_RELEASE=6.0
-	elif echo $UNAME | grep 6.1-RELEASE >/dev/null ; then
-		DISTRIB_RELEASE=6.1
-	elif echo $UNAME | grep 6.2-RELEASE >/dev/null ; then
-		DISTRIB_RELEASE=6.2
-	elif echo $UNAME | grep 6.3-RELEASE >/dev/null ; then
-		DISTRIB_RELEASE=6.3
-	elif echo $UNAME | grep 7.0-RELEASE >/dev/null ; then
-		DISTRIB_RELEASE=7.0
-	elif echo $UNAME | grep 7.1-RELEASE >/dev/null ; then
-		DISTRIB_RELEASE=7.1
-	elif echo $UNAME | grep 7.3-RELEASE >/dev/null ; then
-		DISTRIB_RELEASE=7.3
-	fi
+	DISTRIB_RELEASE=$(echo "$UNAME" | grep RELEASE | sed -e "s|\([0-9]\.[0-9]\)-RELEASE|\1|g")
 
 elif distro gentoo-release ; then
 	DISTRIB_ID="Gentoo"
-	readlink $ROOTDIR/etc/make.profile | grep 2006.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2006.1"
-	readlink $ROOTDIR/etc/make.profile | grep 2006.2 >/dev/null 2>&1 && DISTRIB_RELEASE="2006.2"
-	readlink $ROOTDIR/etc/make.profile | grep 2007.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2007.1"
-	readlink $ROOTDIR/etc/make.profile | grep 2007.2 >/dev/null 2>&1 && DISTRIB_RELEASE="2007.2"
-	readlink $ROOTDIR/etc/make.profile | grep 2008.0 >/dev/null 2>&1 && DISTRIB_RELEASE="2008.0"
-	readlink $ROOTDIR/etc/make.profile | grep 2008.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2008.1"
-	readlink $ROOTDIR/etc/make.profile | grep 2009.1 >/dev/null 2>&1 && DISTRIB_RELEASE="2009.1"
+	DISTRIB_RELEASE=`basename $(readlink $ROOTDIR/etc/make.profile)`
 
 # Slackware based
 elif distro mopslinux-version ; then
@@ -123,7 +103,7 @@ elif distro slackware-version ; then
 
 elif distro arch-release ; then
 	DISTRIB_ID="ArchLinux"
-	DISTRIB_RELEASE="2007"
+	DISTRIB_RELEASE="2010"
 
 # for Ubuntu use standard LSB info
 elif [ "$DISTRIB_ID" = "Ubuntu" ] && [ -n "$DISTRIB_RELEASE" ]; then
@@ -152,6 +132,7 @@ elif distro mandriva-release || distro mandrake-release ; then
 	elif has 2009.0 ; then DISTRIB_RELEASE="2009.0"
 	elif has 2009.1 ; then DISTRIB_RELEASE="2009.1"
 	elif has 2010 ; then DISTRIB_RELEASE="2010"
+	elif has 2011 ; then DISTRIB_RELEASE="2011"
 	fi
 # make old as generic
 #elif distro mandrake-release ; then
@@ -194,8 +175,8 @@ elif distro fedora-release ; then
 	elif has Werewolf ; then DISTRIB_RELEASE="8"
 	elif has Sulphur ; then DISTRIB_RELEASE="9"
 	elif has Cambridge ; then DISTRIB_RELEASE="10"
-	elif has "release 11" ; then DISTRIB_RELEASE="11"
-	elif has "release 12" ; then DISTRIB_RELEASE="12"
+	else
+		DISTRIB_RELEASE=$(echo "$DISTROFILE" | grep "release" | sed -e "s|release \([0-9]*\)|\1|g")
 	fi
 
 elif distro redhat-release ; then
@@ -216,6 +197,7 @@ elif distro redhat-release ; then
 	elif has Taroon ; then 	DISTRIB_RELEASE="3"
 	elif has "release 4" ; then DISTRIB_RELEASE="4"
 	elif has "release 5" ; then DISTRIB_RELEASE="5"
+	elif has "release 6" ; then DISTRIB_RELEASE="6"
 	fi
 
 # SUSE based
@@ -232,6 +214,7 @@ elif distro SuSe-release || distro SuSE-release ; then
 	elif has "11.1" ; then DISTRIB_RELEASE="11.1"
 	elif has "11" ; then DISTRIB_RELEASE="11"
 	elif has "12" ; then DISTRIB_RELEASE="12"
+	elif has "13" ; then DISTRIB_RELEASE="13"
 	fi
 
 # try use standart LSB info
@@ -247,7 +230,7 @@ case $1 in
 		case `pkgvendor` in
 			freebsd) echo "pkg" ;;
 			slackware|mopslinux) echo "tgz" ;;
-			archlinux) echo "tar.gz" ;;
+			archlinux) echo "tar.xz" ;;
 			gentoo) echo "tbz2" ;;
 			debian|ubuntu) echo "deb" ;;
 			alt|asplinux|suse|madriva|mandrake|pclinux)
