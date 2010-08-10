@@ -121,6 +121,7 @@ elif distro pclinuxos-release ; then
 	DISTRIB_ID="PCLinux"
 	if   has "2007" ; then DISTRIB_RELEASE="2007"
 	elif has "2008" ; then DISTRIB_RELEASE="2008"
+	elif has "2010" ; then DISTRIB_RELEASE="2010"
 	fi
 
 elif distro mandriva-release || distro mandrake-release ; then
