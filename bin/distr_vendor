@@ -133,6 +133,7 @@ elif distro mandriva-release || distro mandrake-release ; then
 	elif has 2009.0 ; then DISTRIB_RELEASE="2009.0"
 	elif has 2009.1 ; then DISTRIB_RELEASE="2009.1"
 	elif has 2010 ; then DISTRIB_RELEASE="2010"
+	elif has 2010.1 ; then DISTRIB_RELEASE="2010.1"
 	elif has 2011 ; then DISTRIB_RELEASE="2011"
 	fi
 # make old as generic
