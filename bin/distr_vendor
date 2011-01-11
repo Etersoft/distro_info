@@ -50,6 +50,11 @@ get_var()
 
 }
 
+get_major_version()
+{
+	echo "$1" | sed -e "s/\..*//g"
+}
+
 # Set DISTRIB_ID
 # default
 DISTRIB_ID="Generic"
@@ -135,8 +140,10 @@ elif distro mandriva-release || distro mandrake-release ; then
 	elif has 2008 ; then DISTRIB_RELEASE="2008"
 	elif has 2009.0 ; then DISTRIB_RELEASE="2009.0"
 	elif has 2009.1 ; then DISTRIB_RELEASE="2009.1"
+	else
+		# use /etc/lsb-release info by default
+		DISTRIB_RELEASE=$(get_major_version $DISTRIB_RELEASE)
 	fi
-	# use /etc/lsb-release info by default
 
 # make old as generic
 #elif distro mandrake-release ; then
