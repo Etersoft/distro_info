@@ -50,6 +50,7 @@ get_var()
 
 }
 
+# 2010.1 -> 2010
 get_major_version()
 {
 	echo "$1" | sed -e "s/\..*//g"
@@ -142,7 +143,7 @@ elif distro mandriva-release || distro mandrake-release ; then
 	elif has 2009.1 ; then DISTRIB_RELEASE="2009.1"
 	else
 		# use /etc/lsb-release info by default
-		DISTRIB_RELEASE=$(get_major_version $DISTRIB_RELEASE)
+		true
 	fi
 
 # make old as generic
