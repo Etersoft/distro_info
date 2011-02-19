@@ -188,7 +188,7 @@ elif distro fedora-release ; then
 	elif has Sulphur ; then DISTRIB_RELEASE="9"
 	elif has Cambridge ; then DISTRIB_RELEASE="10"
 	else
-		DISTRIB_RELEASE=$(echo "$DISTROFILE" | grep "release" | sed -e "s|release \([0-9]*\)|\1|g")
+		DISTRIB_RELEASE=$(cat "$DISTROFILE" | grep "release" | sed -e "s|.*release \([0-9]*\).*|\1|g")
 	fi
 
 elif distro redhat-release ; then
