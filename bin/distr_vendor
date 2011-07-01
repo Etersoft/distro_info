@@ -86,7 +86,7 @@ if distro altlinux-release ; then
 # fixme: can we detect by some file?
 elif [ `uname` = "FreeBSD" ] ; then
 	DISTRIB_ID="FreeBSD"
-	UNAME=$(uname -a)
+	UNAME=$(uname -r)
 	DISTRIB_RELEASE=$(echo "$UNAME" | grep RELEASE | sed -e "s|\([0-9]\.[0-9]\)-RELEASE|\1|g")
 
 elif distro gentoo-release ; then
