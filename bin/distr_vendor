@@ -114,6 +114,9 @@ elif distro slackware-version ; then
 elif distro arch-release ; then
 	DISTRIB_ID="ArchLinux"
 	DISTRIB_RELEASE="2010"
+	if grep 2011 -q $ROOTDIR/etc/pacman.d/mirrorlist ; then
+		DISTRIB_RELEASE="2011"
+	fi
 
 # for Ubuntu use standard LSB info
 elif [ "$DISTRIB_ID" = "Ubuntu" ] && [ -n "$DISTRIB_RELEASE" ]; then
@@ -198,10 +201,10 @@ elif distro redhat-release ; then
 	DISTRIB_ID="RHEL"
 	if has CentOS ; then
 		DISTRIB_ID="CentOS"
-		if   has "release 4" ; then DISTRIB_RELEASE="4"
-		elif has "release 5" ; then DISTRIB_RELEASE="5"
-		fi
-	elif has Beryllium ; then
+	elif has Scientific ; then
+		DISTRIB_ID="Scientific"
+	fi
+	if has Beryllium ; then
 		DISTRIB_ID="Scientific"
 		DISTRIB_RELEASE="4.1"
 	elif has Shrike ; then
@@ -211,6 +214,7 @@ elif distro redhat-release ; then
 	elif has "release 4" ; then DISTRIB_RELEASE="4"
 	elif has "release 5" ; then DISTRIB_RELEASE="5"
 	elif has "release 6" ; then DISTRIB_RELEASE="6"
+	elif has "release 7" ; then DISTRIB_RELEASE="7"
 	fi
 
 # SUSE based
