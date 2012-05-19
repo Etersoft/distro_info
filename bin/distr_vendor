@@ -1,14 +1,13 @@
 #!/bin/sh
 # Author: Vitaly Lipatov <lav@etersoft.ru>
-# 2007, 2009, 2010 (c) Etersoft
+# 2007, 2009, 2010, 2012 (c) Etersoft
 # 2007 Public domain
 
-# Print the distro version
+# Detect the distro and version
 # Welcome to send updates!
 
-# You can set ROOTDIR to your root dir
+# You can set ROOTDIR to root system dir
 #ROOTDIR=
-# TODO: /bin/lsb_release
 
 # Check for DISTRO specific file in /etc
 distro()
@@ -19,29 +18,45 @@ distro()
 	[ -f "$DISTROFILE" ]
 }
 
-# Has DISTRO file specified word?
+# Has a distro file the specified word?
 has()
 {
 	[ -n "$DISTROFILE" ] || exit 1
 	grep "$1" "$DISTROFILE" >/dev/null 2>&1
 }
 
-# Translate DISTRIB_ID in vendor name
+# Translate DISTRIB_ID to vendor name (like %_vendor does)
 rpmvendor()
 {
 	[ "$DISTRIB_ID" = "ALTLinux" ] && echo "alt" && return
 	[ "$DISTRIB_ID" = "LinuxXP" ] && echo "lxp" && return
-#	[ "$DISTRIB_ID" = "Mandriva" ] && echo "mdv" && return
 	echo "$DISTRIB_ID" | tr "[A-Z]" "[a-z]"
 }
 
-# Print DISTRIB_ID name in package manner
+# Translate DISTRIB_ID name to package manner (like in the package release name)
 pkgvendor()
 {
-	[ "$DISTRIB_ID" = "ALTLinux" ] && echo "alt" && return
-	[ "$DISTRIB_ID" = "LinuxXP" ] && echo "lxp" && return
 	[ "$DISTRIB_ID" = "Mandriva" ] && echo "mdv" && return
-	echo "$DISTRIB_ID" | tr "[A-Z]" "[a-z]"
+	rpmvendor
+}
+
+# Print pkgtype (need DISTRIB_ID var)
+pkgtype()
+{
+    case `pkgvendor` in
+		freebsd) echo "tbz" ;;
+		sunos) echo "pkg.gz" ;;
+		slackware|mopslinux) echo "tgz" ;;
+		archlinux) echo "tar.xz" ;;
+		gentoo) echo "tbz2" ;;
+		windows) echo "exe" ;;
+		debian|ubuntu|mint|runtu) echo "deb" ;;
+		alt|asplinux|suse|mandriva|mandrake|pclinux)
+			echo "rpm" ;;
+		fedora|redhat|scientific|centos|rhel)
+			echo "rpm" ;;
+		*)  echo "rpm" ;;
+	esac
 }
 
 get_var()
@@ -56,11 +71,11 @@ get_major_version()
 	echo "$1" | sed -e "s/\..*//g"
 }
 
-# Set DISTRIB_ID
-# default
+# Default values
 DISTRIB_ID="Generic"
 DISTRIB_RELEASE=""
 
+# Default with LSB
 if distro lsb-release ; then
 	DISTRIB_ID=`cat $DISTROFILE | get_var DISTRIB_ID`
 	DISTRIB_RELEASE=`cat $DISTROFILE | get_var DISTRIB_RELEASE`
@@ -83,16 +98,11 @@ if distro altlinux-release ; then
 	elif has Ziziphora ; then DISTRIB_RELEASE="5.1"
 	elif has "ALT Linux p5" ; then DISTRIB_RELEASE="p5"
 	elif has "ALT Linux p6" ; then DISTRIB_RELEASE="p6"
+	elif has "ALT Linux p7" ; then DISTRIB_RELEASE="p7"
 	elif has 6.0      ; then DISTRIB_RELEASE="p6"
 	elif has Centaurea ; then DISTRIB_RELEASE="p6"
 	elif has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	fi
-
-# fixme: can we detect by some file?
-elif [ `uname` = "FreeBSD" ] ; then
-	DISTRIB_ID="FreeBSD"
-	UNAME=$(uname -r)
-	DISTRIB_RELEASE=$(echo "$UNAME" | grep RELEASE | sed -e "s|\([0-9]\.[0-9]\)-RELEASE|\1|g")
 
 elif distro gentoo-release ; then
 	DISTRIB_ID="Gentoo"
@@ -154,10 +164,6 @@ elif distro mandriva-release || distro mandrake-release ; then
 		true
 	fi
 
-# make old as generic
-#elif distro mandrake-release ; then
-#	DISTRIB_ID="Mandriva"
-
 # Fedora based
 elif distro linux-xp-release || distro lxp-release; then
 	DISTRIB_ID="LinuxXP"
@@ -188,16 +194,7 @@ elif distro MCBC-release ; then
 
 elif distro fedora-release ; then
 	DISTRIB_ID="Fedora"
-	if   has Stentz ; then DISTRIB_RELEASE="4"
-	elif has Bordeaux ; then DISTRIB_RELEASE="5"
-	elif has Zod ; then DISTRIB_RELEASE="6"
-	elif has Moonshine ; then DISTRIB_RELEASE="7"
-	elif has Werewolf ; then DISTRIB_RELEASE="8"
-	elif has Sulphur ; then DISTRIB_RELEASE="9"
-	elif has Cambridge ; then DISTRIB_RELEASE="10"
-	else
-		DISTRIB_RELEASE=$(cat "$DISTROFILE" | grep "release" | sed -e "s|.*release \([0-9]*\).*|\1|g")
-	fi
+	DISTRIB_RELEASE=$(cat "$DISTROFILE" | grep "release" | sed -e "s|.*release \([0-9]*\).*|\1|g")
 
 elif distro redhat-release ; then
 	# FIXME if need
@@ -241,7 +238,18 @@ elif distro SuSe-release || distro SuSE-release ; then
 	elif has "13" ; then DISTRIB_RELEASE="13"
 	fi
 
-# try use standart LSB info
+# fixme: can we detect by some file?
+elif [ `uname` = "FreeBSD" ] ; then
+	DISTRIB_ID="FreeBSD"
+	UNAME=$(uname -r)
+	DISTRIB_RELEASE=$(echo "$UNAME" | grep RELEASE | sed -e "s|\([0-9]\.[0-9]\)-RELEASE|\1|g")
+
+# fixme: can we detect by some file?
+elif [ `uname` = "SunOS" ] ; then
+	DISTRIB_ID="SunOS"
+	DISTRIB_RELEASE=$(uname -r)
+
+# try use standart LSB info by default
 elif distro lsb-release && [ -n "$DISTRIB_RELEASE" ]; then
 	# use LSB
 	true
@@ -249,30 +257,22 @@ fi
 
 case $1 in
 	-p)
-		# overrider DISTRIB_ID
+		# override DISTRIB_ID
 		test -n "$2" && DISTRIB_ID="$2"
-		case `pkgvendor` in
-			freebsd) echo "pkg" ;;
-			slackware|mopslinux) echo "tgz" ;;
-			archlinux) echo "tar.xz" ;;
-			gentoo) echo "tbz2" ;;
-			debian|ubuntu) echo "deb" ;;
-			alt|asplinux|suse|madriva|mandrake|pclinux)
-				echo "rpm" ;;
-			fedora|redhat|scientific|centos|rhel)
-				echo "rpm" ;;
-			*)  echo "rpm" ;;
-		esac
+		pkgtype
 		exit 0
 		;;
 	-h)
-		echo "-p print type of packaging system"
-		echo "-d print distro name"
-		echo "-v print version of distro"
-		echo "-e print full name of distro with version (by default)"
-		echo "-s print name of distro for build system"
-		echo "-n print vendor name (as _vendor macros in rpm)"
-		echo "-h this help"
+		echo "distr_vendor - system name and version detection"
+		echo "Usage: distr_vendor [options] [args]"
+		echo "-p [SystemName] - print type of packaging system"
+		echo "-d - print distro name"
+		echo "-v - print version of distro"
+		echo "-e - print full name of distro with version (by default)"
+		echo "-s [SystemName] - print name of distro for build system (like in the package release name)"
+		echo "-n [SystemName] - print vendor name (as _vendor macros in rpm)"
+		echo "-V - print the version of $0"
+		echo "-h - this help"
 		exit 0
 		;;
 	-d)
@@ -282,14 +282,23 @@ case $1 in
 		echo $DISTRIB_RELEASE
 		;;
 	-s)
+		# override DISTRIB_ID
+		test -n "$2" && DISTRIB_ID="$2"
 		pkgvendor
 		exit 0
 		;;
 	-n)
+		# override DISTRIB_ID
+		test -n "$2" && DISTRIB_ID="$2"
 		rpmvendor
 		exit 0
 		;;
+	-V)
+		echo "20120519"
+		exit 0
+		;;
 	*)
+		# if run without args, just printout Name/Version of the current system
 		[ -n "$DISTRIB_RELEASE" ] && echo $DISTRIB_ID/$DISTRIB_RELEASE || echo $DISTRIB_ID
 		;;
 esac
