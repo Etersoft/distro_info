@@ -51,7 +51,7 @@ pkgtype()
 		gentoo) echo "tbz2" ;;
 		windows) echo "exe" ;;
 		debian|ubuntu|mint|runtu) echo "deb" ;;
-		alt|asplinux|suse|mandriva|mandrake|pclinux)
+		alt|asplinux|suse|mandriva|mandrake|pclinux|sled|sles)
 			echo "rpm" ;;
 		fedora|redhat|scientific|centos|rhel)
 			echo "rpm" ;;
@@ -221,21 +221,11 @@ elif distro redhat-release ; then
 # SUSE based
 elif distro SuSe-release || distro SuSE-release ; then
 	DISTRIB_ID="SUSE"
-	if   has "Desktop 9" ; then
-		DISTRIB_ID="NLD"
-		DISTRIB_RELEASE="9"
-	elif has "10.1" ; then DISTRIB_RELEASE="10.1"
-	elif has "10.2" ; then DISTRIB_RELEASE="10.2"
-	elif has "10.3" ; then DISTRIB_RELEASE="10.3"
-	elif has "10.4" ; then DISTRIB_RELEASE="10.4"
-	elif has "10" ; then DISTRIB_RELEASE="10"
-	elif has "11.1" ; then DISTRIB_RELEASE="11.1"
-	elif has "11.2" ; then DISTRIB_RELEASE="11.2"
-	elif has "11.3" ; then DISTRIB_RELEASE="11.3"
-	elif has "11.4" ; then DISTRIB_RELEASE="11.4"
-	elif has "11" ; then DISTRIB_RELEASE="11"
-	elif has "12" ; then DISTRIB_RELEASE="12"
-	elif has "13" ; then DISTRIB_RELEASE="13"
+	DISTRIB_RELEASE=$(cat "$DISTROFILE" | grep "VERSION" | sed -e "s|^VERSION = ||g")
+	if   has "SUSE Linux Enterprise Desktop" ; then
+		DISTRIB_ID="SLED"
+	elif has "SUSE Linux Enterprise Server" ; then
+		DISTRIB_ID="SLES"
 	fi
 
 # fixme: can we detect by some file?
