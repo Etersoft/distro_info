@@ -94,7 +94,6 @@ if distro altlinux-release ; then
 	elif has Walnut   ; then DISTRIB_RELEASE="4.0"
 	elif has 5.0      ; then DISTRIB_RELEASE="5.0"
 	elif has 5.1      ; then DISTRIB_RELEASE="5.1"
-	elif has Ziziphora ; then DISTRIB_RELEASE="5.1"
 	elif has "ALT Linux p5" ; then DISTRIB_RELEASE="p5"
 	elif has "ALT Linux p6" ; then DISTRIB_RELEASE="p6"
 	elif has "ALT Linux p7" ; then DISTRIB_RELEASE="p7"
@@ -118,11 +117,7 @@ elif distro mopslinux-version ; then
 	fi
 elif distro slackware-version ; then
 	DISTRIB_ID="Slackware"
-	if   has 10.2 ; then DISTRIB_RELEASE="10.2"
-	elif has 11 ; then DISTRIB_RELEASE="11"
-	elif has 11.1 ; then DISTRIB_RELEASE="11.1"
-	elif has 12 ; then DISTRIB_RELEASE="12"
-	fi
+	DISTRIB_RELEASE="$(grep -Eo [0-9]+\.[0-9]+ $DISTROFILE)"
 
 elif distro arch-release ; then
 	DISTRIB_ID="ArchLinux"
