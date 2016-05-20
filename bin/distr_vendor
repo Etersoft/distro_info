@@ -51,6 +51,7 @@ pkgtype()
 		gentoo) echo "tbz2" ;;
 		windows) echo "exe" ;;
 		android) echo "apk" ;;
+		alpine) echo "apk" ;;
 		cygwin) echo "tar.xz" ;;
 		debian|ubuntu|mint|runtu|mcst) echo "deb" ;;
 		alt|asplinux|suse|mandriva|rosa|mandrake|pclinux|sled|sles)
@@ -86,15 +87,13 @@ fi
 # ALT Linux based
 if distro altlinux-release ; then
 	DISTRIB_ID="ALTLinux"
-	# default version
-	DISTRIB_RELEASE="Sisyphus"
-	# some concrete version
 	if has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	elif has "ALT Linux 7." ; then DISTRIB_RELEASE="p7"
 	elif has "ALT Linux 8." ; then DISTRIB_RELEASE="p8"
+	elif has "Simply Linux 6." ; then DISTRIB_RELEASE="p6"
 	elif has "Simply Linux 7." ; then DISTRIB_RELEASE="p7"
 	elif has "Simply Linux 8." ; then DISTRIB_RELEASE="p8"
-	elif has "ALT Linux 6.0" ; then DISTRIB_RELEASE="p6"
+	elif has "ALT Linux 6." ; then DISTRIB_RELEASE="p6"
 	elif has "ALT Linux p8"  ; then DISTRIB_RELEASE="p8"
 	elif has "ALT Linux p7"  ; then DISTRIB_RELEASE="p7"
 	elif has "ALT Linux p6"  ; then DISTRIB_RELEASE="p6"
@@ -133,6 +132,11 @@ elif distro slackware-version ; then
 	DISTRIB_ID="Slackware"
 	DISTRIB_RELEASE="$(grep -Eo [0-9]+\.[0-9]+ $DISTROFILE)"
 
+elif distro os-release && which apk 2>/dev/null >/dev/null ; then
+	. $ROOTDIR/etc/os-release
+	DISTRIB_ID="$ID"
+	DISTRIB_RELEASE="$VERSION_ID"
+
 elif distro arch-release ; then
 	DISTRIB_ID="ArchLinux"
 	DISTRIB_RELEASE="2010"
@@ -152,7 +156,7 @@ elif [ "$DISTRIB_ID" = "Ubuntu" ] && [ -n "$DISTRIB_RELEASE" ]; then
 # Debian based
 elif distro debian_version ; then
 	DISTRIB_ID="Debian"
-	DISTRIB_RELEASE=`cat $DISTROFILE`
+	DISTRIB_RELEASE=$(cat $DISTROFILE | sed -e "s/\..*//g")
 
 
 # Mandriva based
