@@ -59,7 +59,7 @@ pkgtype()
 		debian|ubuntu|mint|runtu|mcst|astra) echo "deb" ;;
 		alt|asplinux|suse|mandriva|rosa|mandrake|pclinux|sled|sles)
 			echo "rpm" ;;
-		fedora|redhat|scientific|centos|rhel)
+		fedora|redhat|scientific|centos|rhel|goslinux)
 			echo "rpm" ;;
 		*)  echo "rpm" ;;
 	esac
@@ -238,6 +238,8 @@ elif distro redhat-release ; then
 		DISTRIB_ID="CentOS"
 	elif has Scientific ; then
 		DISTRIB_ID="Scientific"
+	elif has GosLinux ; then
+		DISTRIB_ID="GosLinux"
 	fi
 	if has Beryllium ; then
 		DISTRIB_ID="Scientific"
@@ -333,7 +335,7 @@ case $1 in
 		exit 0
 		;;
 	-V)
-		echo "20120519"
+		echo "20161114"
 		exit 0
 		;;
 	*)
