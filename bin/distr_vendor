@@ -1,6 +1,6 @@
 #!/bin/sh
 # Author: Vitaly Lipatov <lav@etersoft.ru>
-# 2007, 2009, 2010, 2012, 2016 (c) Etersoft
+# 2007, 2009, 2010, 2012, 2016, 2017 (c) Etersoft
 # 2007-2016 Public domain
 
 # Detect the distro and version
@@ -97,7 +97,7 @@ if distro altlinux-release ; then
 	if has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	elif has "ALT Linux 7." ; then DISTRIB_RELEASE="p7"
 	elif has "ALT Linux 8." ; then DISTRIB_RELEASE="p8"
-	elif has "ALT Workstation K 8." ; then DISTRIB_RELEASE="p8"
+	elif has "ALT .*8.[0-9]" ; then DISTRIB_RELEASE="p8"
 	elif has "Simply Linux 6." ; then DISTRIB_RELEASE="p6"
 	elif has "Simply Linux 7." ; then DISTRIB_RELEASE="p7"
 	elif has "Simply Linux 8." ; then DISTRIB_RELEASE="p8"
@@ -108,12 +108,6 @@ if distro altlinux-release ; then
 	elif has "ALT Linux p5"  ; then DISTRIB_RELEASE="p5"
 	elif has "ALT Linux 5.1" ; then DISTRIB_RELEASE="5.1"
 	elif has "ALT Linux 5.0" ; then DISTRIB_RELEASE="5.0"
-	elif has "ALT Linux 4.1" ; then DISTRIB_RELEASE="4.1"
-	elif has "ALT Linux 4.0" ; then DISTRIB_RELEASE="4.0"
-	elif has Walnut          ; then DISTRIB_RELEASE="4.0"
-	elif has 20070810 ; then DISTRIB_RELEASE="4.0"
-	elif has Ajuga    ; then DISTRIB_RELEASE="4.0"
-	elif has 20050723 ; then DISTRIB_RELEASE="3.0"
 	elif has Citron   ; then DISTRIB_RELEASE="2.4"
 	fi
 
@@ -256,6 +250,7 @@ elif distro redhat-release ; then
 	elif has "release 5" ; then DISTRIB_RELEASE="5"
 	elif has "release 6" ; then DISTRIB_RELEASE="6"
 	elif has "release 7" ; then DISTRIB_RELEASE="7"
+	elif has "release 8" ; then DISTRIB_RELEASE="8"
 	fi
 
 # SUSE based
