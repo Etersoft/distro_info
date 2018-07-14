@@ -1,7 +1,7 @@
 #!/bin/sh
 # Author: Vitaly Lipatov <lav@etersoft.ru>
-# 2007, 2009, 2010, 2012, 2016, 2017 (c) Etersoft
-# 2007-2016 Public domain
+# 2007, 2009, 2010, 2012, 2016, 2017, 2018 (c) Etersoft
+# 2007-2018 Public domain
 
 # Detect the distro and version
 # Welcome to send updates!
@@ -25,6 +25,11 @@ has()
 	grep "$*" "$DISTROFILE" >/dev/null 2>&1
 }
 
+firstupper()
+{
+	echo "$*" | sed 's/.*/\u&/'
+}
+
 # Translate DISTRIB_ID to vendor name (like %_vendor does)
 rpmvendor()
 {
@@ -33,7 +38,7 @@ rpmvendor()
 	[ "$DISTRIB_ID" = "LinuxXP" ] && echo "lxp" && return
 	[ "$DISTRIB_ID" = "TinyCoreLinux" ] && echo "tcl" && return
 	[ "$DISTRIB_ID" = "VoidLinux" ] && echo "void" && return
-	echo "$DISTRIB_ID" | tr "[A-Z]" "[a-z]"
+	echo "$DISTRIB_ID" | tr "[:upper:]" "[:lower:]"
 }
 
 # Translate DISTRIB_ID name to package manner (like in the package release name)
@@ -46,11 +51,12 @@ pkgvendor()
 # Print pkgtype (need DISTRIB_ID var)
 pkgtype()
 {
-    case `pkgvendor` in
+# TODO: try use generic names
+    case $(pkgvendor) in
 		freebsd) echo "tbz" ;;
 		sunos) echo "pkg.gz" ;;
 		slackware|mopslinux) echo "tgz" ;;
-		archlinux) echo "pkg.tar.xz" ;;
+		archlinux|manjaro) echo "pkg.tar.xz" ;;
 		gentoo) echo "tbz2" ;;
 		windows) echo "exe" ;;
 		android) echo "apk" ;;
@@ -86,9 +92,9 @@ DISTRIB_CODENAME=""
 
 # Default with LSB
 if distro lsb-release ; then
-	DISTRIB_ID=`cat $DISTROFILE | get_var DISTRIB_ID`
-	DISTRIB_RELEASE=`cat $DISTROFILE | get_var DISTRIB_RELEASE`
-	DISTRIB_CODENAME=`cat $DISTROFILE | get_var DISTRIB_CODENAME`
+	DISTRIB_ID=$(cat $DISTROFILE | get_var DISTRIB_ID)
+	DISTRIB_RELEASE=$(cat $DISTROFILE | get_var DISTRIB_RELEASE)
+	DISTRIB_CODENAME=$(cat $DISTROFILE | get_var DISTRIB_CODENAME)
 fi
 
 # ALT Linux based
@@ -96,6 +102,7 @@ if distro altlinux-release ; then
 	DISTRIB_ID="ALTLinux"
 	if has Sisyphus ; then DISTRIB_RELEASE="Sisyphus"
 	elif has "ALT Linux 7." ; then DISTRIB_RELEASE="p7"
+	elif has "ALT Linux t7." ; then DISTRIB_RELEASE="t7"
 	elif has "ALT Linux 8." ; then DISTRIB_RELEASE="p8"
 	elif has "ALT .*8.[0-9]" ; then DISTRIB_RELEASE="p8"
 	elif has "Simply Linux 6." ; then DISTRIB_RELEASE="p6"
@@ -108,14 +115,22 @@ if distro altlinux-release ; then
 	elif has "ALT Linux p5"  ; then DISTRIB_RELEASE="p5"
 	elif has "ALT Linux 5.1" ; then DISTRIB_RELEASE="5.1"
 	elif has "ALT Linux 5.0" ; then DISTRIB_RELEASE="5.0"
+	elif has "ALT Linux 4.1" ; then DISTRIB_RELEASE="4.1"
+	elif has "ALT Linux 4.0" ; then DISTRIB_RELEASE="4.0"
+	elif has Walnut          ; then DISTRIB_RELEASE="4.0"
+	elif has Hypericum       ; then DISTRIB_RELEASE="p8"
+	elif has "starter kit"   ; then DISTRIB_RELEASE="p8"
+	elif has 20070810 ; then DISTRIB_RELEASE="4.0"
+	elif has Ajuga    ; then DISTRIB_RELEASE="4.0"
+	elif has 20050723 ; then DISTRIB_RELEASE="3.0"
 	elif has Citron   ; then DISTRIB_RELEASE="2.4"
 	fi
 
 elif distro gentoo-release ; then
 	DISTRIB_ID="Gentoo"
 	MAKEPROFILE=$(readlink $ROOTDIR/etc/portage/make.profile 2>/dev/null) || MAKEPROFILE=$(readlink $ROOTDIR/etc/make.profile)
-	DISTRIB_RELEASE=`basename $MAKEPROFILE`
-	echo $DISTRIB_RELEASE | grep -q "[0-9]" || DISTRIB_RELEASE=`basename $(dirname $MAKEPROFILE)`
+	DISTRIB_RELEASE=$(basename $MAKEPROFILE)
+	echo $DISTRIB_RELEASE | grep -q "[0-9]" || DISTRIB_RELEASE=$(basename "$(dirname $MAKEPROFILE)")
 
 # Slackware based
 elif distro mopslinux-version ; then
@@ -128,19 +143,22 @@ elif distro mopslinux-version ; then
 	fi
 elif distro slackware-version ; then
 	DISTRIB_ID="Slackware"
-	DISTRIB_RELEASE="$(grep -Eo [0-9]+\.[0-9]+ $DISTROFILE)"
+	DISTRIB_RELEASE="$(grep -Eo '[0-9]+\.[0-9]+' $DISTROFILE)"
 
 elif distro os-release && which apk 2>/dev/null >/dev/null ; then
+	# shellcheck disable=SC1090
 	. $ROOTDIR/etc/os-release
-	DISTRIB_ID="$ID"
+	DISTRIB_ID="$(firstupper "$ID")"
 	DISTRIB_RELEASE="$VERSION_ID"
 
 elif distro os-release && which tce-ab 2>/dev/null >/dev/null ; then
+	# shellcheck disable=SC1090
 	. $ROOTDIR/etc/os-release
 	DISTRIB_ID="TinyCoreLinux"
 	DISTRIB_RELEASE="$VERSION_ID"
 
 elif distro os-release && which xbps-query 2>/dev/null >/dev/null ; then
+	# shellcheck disable=SC1090
 	. $ROOTDIR/etc/os-release
 	DISTRIB_ID="VoidLinux"
 	DISTRIB_RELEASE="Live"
@@ -152,6 +170,7 @@ elif distro arch-release ; then
 		DISTRIB_RELEASE="2011"
 	fi
 
+# Elbrus
 elif distro mcst_version ; then
 	DISTRIB_ID="MCST"
 	DISTRIB_RELEASE=$(cat "$DISTROFILE" | grep "release" | sed -e "s|.*release \([0-9]*\).*|\1|g")
@@ -263,33 +282,41 @@ elif distro SuSe-release || distro SuSE-release ; then
 		DISTRIB_ID="SLES"
 	fi
 
+# https://www.freedesktop.org/software/systemd/man/os-release.html
+elif distro os-release ; then
+	# shellcheck disable=SC1090
+	. $ROOTDIR/etc/os-release
+	DISTRIB_ID="$(firstupper "$ID")"
+	DISTRIB_RELEASE="$VERSION_ID"
+	[ -n "$DISTRIB_RELEASE" ] || DISTRIB_RELEASE="CUR"
+
 # fixme: can we detect by some file?
-elif [ `uname` = "FreeBSD" ] ; then
+elif [ "$(uname)" = "FreeBSD" ] ; then
 	DISTRIB_ID="FreeBSD"
 	UNAME=$(uname -r)
 	DISTRIB_RELEASE=$(echo "$UNAME" | grep RELEASE | sed -e "s|\([0-9]\.[0-9]\)-RELEASE|\1|g")
 
 # fixme: can we detect by some file?
-elif [ `uname` = "SunOS" ] ; then
+elif [ "$(uname)" = "SunOS" ] ; then
 	DISTRIB_ID="SunOS"
 	DISTRIB_RELEASE=$(uname -r)
 
 # fixme: can we detect by some file?
-elif [ `uname -s 2>/dev/null` = "Darwin" ] ; then
+elif [ "$(uname -s 2>/dev/null)" = "Darwin" ] ; then
 	DISTRIB_ID="MacOS"
 	DISTRIB_RELEASE=$(uname -r)
 
 # fixme: move to up
-elif [ `uname` = "Linux" ] && which guix 2>/dev/null >/dev/null ; then
+elif [ "$(uname)" = "Linux" ] && which guix 2>/dev/null >/dev/null ; then
 	DISTRIB_ID="GNU/Linux/Guix"
 	DISTRIB_RELEASE=$(uname -r)
 
 # fixme: move to up
-elif [ `uname` = "Linux" ] && [ -x $ROOTDIR/system/bin/getprop ] ; then
+elif [ "$(uname)" = "Linux" ] && [ -x $ROOTDIR/system/bin/getprop ] ; then
 	DISTRIB_ID="Android"
 	DISTRIB_RELEASE=$(getprop | awk -F": " '/build.version.release/ { print $2 }' | tr -d '[]')
 
-elif [ `uname -o 2>/dev/null` = "Cygwin" ] ; then
+elif [ "$(uname -o 2>/dev/null)" = "Cygwin" ] ; then
         DISTRIB_ID="Cygwin"
         DISTRIB_RELEASE="all"
 
@@ -305,6 +332,123 @@ elif distro lsb-release && [ -n "$DISTRIB_RELEASE" ]; then
 	esac
 fi
 
+get_base_os_name()
+{
+local DIST_OS
+# Resolve the os
+DIST_OS=`uname -s | tr "[:upper:]" "[:lower:]" | tr -d " \t\r\n"`
+case "$DIST_OS" in
+    'sunos')
+        DIST_OS="solaris"
+        ;;
+    'hp-ux' | 'hp-ux64')
+        DIST_OS="hpux"
+        ;;
+    'darwin' | 'oarwin')
+        DIST_OS="macosx"
+        ;;
+    'unix_sv')
+        DIST_OS="unixware"
+        ;;
+    'freebsd' | 'openbsd' | 'netbsd')
+        DIST_OS="freebsd"
+        ;;
+esac
+echo "$DIST_OS"
+}
+
+get_uname_m()
+{
+    uname -m | tr [:upper:] [:lower:] | tr -d " \t\r\n"
+}
+
+get_arch()
+{
+local DIST_ARCH
+# Resolve the architecture
+DIST_ARCH="$(get_uname_m)"
+case "$DIST_ARCH" in
+    'ia32' | 'i386' | 'i486' | 'i586' | 'i686')
+        DIST_ARCH="x86"
+        ;;
+    'amd64' | 'x86_64')
+        DIST_ARCH="x86_64"
+        ;;
+    'ia64' | 'ia-64')
+        DIST_ARCH="ia64"
+        ;;
+    'ip27' | 'mips')
+        DIST_ARCH="mips"
+        ;;
+    'powermacintosh' | 'power' | 'powerpc' | 'power_pc' | 'ppc64')
+        DIST_ARCH="ppc"
+        ;;
+    'pa_risc' | 'pa-risc')
+        DIST_ARCH="parisc"
+        ;;
+    'sun4u' | 'sparcv9')
+        DIST_ARCH="sparc"
+        ;;
+    '9000/800')
+        DIST_ARCH="parisc"
+        ;;
+    armv*)
+        if [ -z "$(readelf -A /proc/self/exe | grep Tag_ABI_VFP_args)" ] ; then
+            DIST_ARCH="armel"
+        else
+            DIST_ARCH="armhf"
+        fi
+        ;;
+esac
+echo "$DIST_ARCH"
+}
+
+get_bit_size()
+{
+local DIST_BIT
+# Check if we are running on 64bit platform, seems like a workaround for now...
+DIST_BIT="$(get_uname_m)"
+case "$DIST_BIT" in
+    'amd64' | 'ia64' | 'x86_64' | 'ppc64')
+        DIST_BIT="64"
+        ;;
+#    'pa_risc' | 'pa-risc') # Are some of these 64bit? Least not all...
+#       BIT="64"
+#        ;;
+    'sun4u' | 'sparcv9') # Are all sparcs 64?
+        DIST_BIT="64"
+        ;;
+#    '9000/800')
+#       DIST_BIT="64"
+#        ;;
+    *) # In any other case default to 32
+        DIST_BIT="32"
+        ;;
+esac
+echo "$DIST_BIT"
+}
+
+# TODO: check before calc
+get_memory_size() {
+    local detected=0
+    local DIST_OS="$(get_base_os_name)"
+    case "$DIST_OS" in
+        macosx)
+            detected=$((`sysctl hw.memsize | sed s/"hw.memsize: "//`/1024/1024))
+            ;;
+        freebsd)
+            detected=$((`sysctl hw.physmem | sed s/"hw.physmem: "//`/1024/1024))
+            ;;
+        linux)
+            [ -r /proc/meminfo ] && detected=$((`cat /proc/meminfo | grep MemTotal | awk '{print $2}'`/1024))
+            ;;
+    esac
+
+    # Exit codes only support values between 0 and 255. So use stdout.
+    echo $detected
+}
+
+
 case $1 in
 	-p)
 		# override DISTRIB_ID
@@ -317,6 +461,10 @@ case $1 in
 		echo "Usage: distr_vendor [options] [args]"
 		echo "-p [SystemName] - print type of packaging system"
 		echo "-d - print distro name"
+		echo "-a - print hardware architecture"
+		echo "-b - print size of arch bit (32/64)"
+		echo "-m - print system memory size (in MB)"
+		echo "-o - print base os name"
 		echo "-v - print version of distro"
 		echo "-e - print full name of distro with version (by default)"
 		echo "-s [SystemName] - print name of distro for build system (like in the package release name)"
@@ -327,6 +475,18 @@ case $1 in
 		;;
 	-d)
 		echo $DISTRIB_ID
+		;;
+	-a)
+		get_arch
+		;;
+	-b)
+		get_bit_size
+		;;
+	-m)
+		get_memory_size
+		;;
+	-o)
+		get_base_os_name
 		;;
 	-v)
 		echo $DISTRIB_RELEASE
@@ -344,7 +504,7 @@ case $1 in
 		exit 0
 		;;
 	-V)
-		echo "20161212"
+		echo "20171010"
 		exit 0
 		;;
 	*)
