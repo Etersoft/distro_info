@@ -9,6 +9,8 @@
 # You can set ROOTDIR to root system dir
 #ROOTDIR=
 
+# TODO: check /etc/system-release
+
 # Check for DISTRO specific file in /etc
 distro()
 {
@@ -51,6 +53,7 @@ rpmvendor()
 	[ "$DISTRIB_ID" = "LinuxXP" ] && echo "lxp" && return
 	[ "$DISTRIB_ID" = "TinyCoreLinux" ] && echo "tcl" && return
 	[ "$DISTRIB_ID" = "VoidLinux" ] && echo "void" && return
+	[ "$DISTRIB_ID" = "OpenSUSE" ] && echo "suse" && return
 	tolower "$DISTRIB_ID"
 }
 
@@ -274,6 +277,9 @@ elif distro os-release ; then
 	DISTRIB_ID="$(firstupper "$ID")"
 	DISTRIB_RELEASE="$VERSION_ID"
 	[ -n "$DISTRIB_RELEASE" ] || DISTRIB_RELEASE="CUR"
+	if [ "$ID" = "opensuse-leap" ] ; then
+		DISTRIB_ID="SUSE"
+	fi
 
 # fixme: can we detect by some file?
 elif [ "$(uname)" = "FreeBSD" ] ; then
@@ -312,7 +318,8 @@ elif distro lsb-release && [ -n "$DISTRIB_RELEASE" ]; then
 	# fix distro name
 	case "$DISTRIB_ID" in
 		"openSUSE Tumbleweed")
-			DISTRIB_ID="Tumbleweed"
+			DISTRIB_ID="SUSE"
+			DISTRIB_RELEASE="Tumbleweed"
 			;;
 	esac
 fi
