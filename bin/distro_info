@@ -480,7 +480,8 @@ get_virt()
 get_service_manager()
 {
     [ -d /run/systemd/system ] && echo "systemd" && return
-    [ -d /usr/share/upstart ] && echo "upstart" && return
+    # TODO
+    #[ -d /usr/share/upstart ] && echo "upstart" && return
     [ -d /etc/init.d ] && echo "sysvinit" && return
     echo "(unknown)"
 }
