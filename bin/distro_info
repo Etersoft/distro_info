@@ -460,9 +460,18 @@ get_virt()
         [ -z "$VIRT" ] && echo "(unknown)" && return
         echo "$VIRT" && return
     fi
-    if [ -r /proc/user_beancounters ] ; then
+
+    # TODO: use virt-what under root
+
+    # inspired by virt_what
+    if [ -d "/proc/vz" -a ! -d "/proc/bc" ]; then
         echo "openvz" && return
     fi
+
+    if [ -r "/sys/bus/xen" ] ; then
+        echo "xen" && return
+    fi
+
     echo "(unknown)"
     # TODO: check for openvz
 }
