@@ -449,12 +449,31 @@ print_name_version()
     [ -n "$DISTRIB_RELEASE" ] && echo $DISTRIB_ID/$DISTRIB_RELEASE || echo $DISTRIB_ID
 }
 
+get_virt()
+{
+    local VIRT
+    local SDCMD
+    SDCMD=$(which systemd-detect-virt 2>/dev/null)
+    if [ -n "$SDCMD" ] ; then
+        VIRT="$($SDCMD)"
+        [ "$VIRT" = "none" ] && echo "(host system)" && return
+        [ -z "$VIRT" ] && echo "(unknown)" && return
+        echo "$VIRT" && return
+    fi
+    if [ -r /proc/user_beancounters ] ; then
+        echo "openvz" && return
+    fi
+    echo "(unknown)"
+    # TODO: check for openvz
+}
+
 print_total_info()
 {
 cat <<EOF
 distro_info total information (run with -h to get help):
  Distro name and version (-e): $(print_name_version)
         Packaging system (-p): $(pkgtype)
+          Virtualization (-i): $(get_virt)
         CPU Architecture (-a): $(get_arch)
  CPU norm register size  (-b): $(get_bit_size)
  System memory size (MB) (-m): $(get_memory_size)
@@ -474,6 +493,7 @@ case $1 in
 		echo " -b - print size of arch bit (32/64)"
 		echo " -d - print distro name"
 		echo " -e - print full name of distro with version"
+		echo " -i - print virtualization type"
 		echo " -h - this help"
 		echo " -m - print system memory size (in MB)"
 		echo " -n [SystemName] - print vendor name (as _vendor macros in rpm)"
@@ -499,6 +519,9 @@ case $1 in
 		;;
 	-b)
 		get_bit_size
+		;;
+	-i)
+		get_virt
 		;;
 	-m)
 		get_memory_size
