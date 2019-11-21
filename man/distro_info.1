@@ -58,6 +58,9 @@ print distro name (Ubuntu, ALTLinux)
 .I -e
 print name and version of the distro (Ubuntu/18.04)
 .TP
+.I -i
+print virtualization type (openvz, kvm, (host system))
+.TP
 .I -m
 print system memory size (in MB)
 .TP
@@ -66,6 +69,9 @@ print base OS name (linux, macos)
 .TP
 .I -p
 print type of the packaging system (deb, rpm)
+.TP
+.I -y
+print running service manager (systemd, sysvinit)
 .TP
 .I -v
 print version of the distro (f.i. 20.04 or p9)

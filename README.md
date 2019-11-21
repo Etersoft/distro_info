@@ -7,7 +7,8 @@ Just run
 
 or -h to get all supported options.
 
-```$ ./distro_info 
+```
+$ ./distro_info 
 distro_info total information (run with -h to get help):
  Distro name and version (-e): ALTLinux/Sisyphus
         Packaging system (-p): rpm
@@ -19,7 +20,8 @@ Build system distro name (-s): alt
 Build system vendor name (-n): alt
 ```
 
-```$ hostnamectl
+```
+$ hostnamectl
    Static hostname: builder64.office.etersoft.ru
          Icon name: computer-vm
            Chassis: vm
