@@ -1,0 +1,82 @@
+'\" t
+.\"
+.\" Author: Vitaly Lipatov
+.\"
+.\" This file has been put into the public domain.
+.\" You can do whatever you want with this file.
+.\"
+.TH EEPM 1 "November 2019" "Version 0.1"
+<------><------>echo " -a - print hardware architecture"
+<------><------>echo " -b - print size of arch bit (32/64)"
+<------><------>echo " -d - print distro name"
+<------><------>echo " -e - print full name of distro with version"
+<------><------>echo " -h - this help"
+<------><------>echo " -m - print system memory size (in MB)"
+<------><------>echo " -n [SystemName] - print vendor name (as _vendor macros in rpm)"
+<------><------>echo " -o - print base os name"
+<------><------>echo " -p [SystemName] - print type of the packaging system"
+<------><------>echo " -s [SystemName] - print name of distro for build system (like in the package release name)"
+<------><------>echo " -v - print version of distro"
+<------><------>echo " -V - print the utility version"
+<------><------>echo "Run without args to print all information."
+<------><------>exit 0
+
+
+.SH NAME
+distro_info \- get various info about a system and used distro
+.SH SYNOPSIS
+.B distro_info
+.RI [ options ]...
+.RI [args]...
+.PP
+.SH DESCRIPTION
+.BI
+With distro_info you can get various info about your system, used unix-like distro and arch.
+.BI
+distro_info can be used manually, in shell scripts or other programs.
+
+Please use distro_info -h to get detail command explain.
+
+Run without options to print all information.
+.SH OPTIONS
+.TP
+.I -h
+Display help
+.TP
+.I -V
+Show version and exit
+.TP
+.I -a
+print hardware architecture (aarch64, x86_64)
+.TP
+.I -b
+print size of normal word size (arch bits) (32/64)
+.TP
+.I -d
+print distro name (Ubuntu, ALTLinux)
+.TP
+.I -e
+print name and version of the distro (Ubuntu/18.04)
+.TP
+.I -m
+print system memory size (in MB)
+.TP
+.I -o
+print base OS name (linux, macos)
+.TP
+.I -p
+print type of the packaging system (deb, rpm)
+.TP
+.I -v
+print version of the distro (f.i. 20.04 or p9)
+.TP
+.SH BUGS
+Please report any bugs to lav@etersoft.ru
+.SH EXIT STATUS
+.B distro_info
+will return zero on success and non zero on operation failure.
+.SH SEE ALSO
+.BR eepm (1)
+.TP
+.B https://github.com/Etersoft/distro_info
+distro_info page
