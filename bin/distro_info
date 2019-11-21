@@ -441,29 +441,51 @@ get_memory_size() {
     echo $detected
 }
 
+print_name_version()
+{
+    [ -n "$DISTRIB_RELEASE" ] && echo $DISTRIB_ID/$DISTRIB_RELEASE || echo $DISTRIB_ID
+}
+
+print_total_info()
+{
+cat <<EOF
+distro_info total information (run with -h to get help):
+ Distro name and version (-e): $(print_name_version)
+        Packaging system (-p): $(pkgtype)
+        CPU Architecture (-a): $(get_arch)
+ CPU norm register size  (-b): $(get_bit_size)
+ System memory size (MB) (-m): $(get_memory_size)
+            Base OS name (-o): $(get_base_os_name)
+Build system distro name (-s): $(pkgvendor)
+Build system vendor name (-n): $(rpmvendor)
+EOF
+}
+
 
 case $1 in
+	-h)
+		echo "distro_info - distro name and version detection"
+		echo "Usage: distro_info [options] [args]"
+		echo "Options:"
+		echo " -p [SystemName] - print type of the packaging system"
+		echo " -d - print distro name"
+		echo " -a - print hardware architecture"
+		echo " -b - print size of arch bit (32/64)"
+		echo " -m - print system memory size (in MB)"
+		echo " -o - print base os name"
+		echo " -v - print version of distro"
+		echo " -e - print full name of distro with version"
+		echo " -s [SystemName] - print name of distro for build system (like in the package release name)"
+		echo " -n [SystemName] - print vendor name (as _vendor macros in rpm)"
+		echo " -V - print the utility version"
+		echo " -h - this help"
+		echo "Run without args to print all information."
+		exit 0
+		;;
 	-p)
 		# override DISTRIB_ID
 		test -n "$2" && DISTRIB_ID="$2"
 		pkgtype
-		exit 0
-		;;
-	-h)
-		echo "distr_vendor - system name and version detection"
-		echo "Usage: distr_vendor [options] [args]"
-		echo "-p [SystemName] - print type of packaging system"
-		echo "-d - print distro name"
-		echo "-a - print hardware architecture"
-		echo "-b - print size of arch bit (32/64)"
-		echo "-m - print system memory size (in MB)"
-		echo "-o - print base os name"
-		echo "-v - print version of distro"
-		echo "-e - print full name of distro with version (by default)"
-		echo "-s [SystemName] - print name of distro for build system (like in the package release name)"
-		echo "-n [SystemName] - print vendor name (as _vendor macros in rpm)"
-		echo "-V - print the version of $0"
-		echo "-h - this help"
 		exit 0
 		;;
 	-d)
@@ -497,12 +519,14 @@ case $1 in
 		exit 0
 		;;
 	-V)
-		echo "20171010"
+		echo "20191121"
 		exit 0
 		;;
+	-e)
+		print_name_version
+		;;
 	*)
-		# if run without args, just printout Name/Version of the current system
-		[ -n "$DISTRIB_RELEASE" ] && echo $DISTRIB_ID/$DISTRIB_RELEASE || echo $DISTRIB_ID
+		print_total_info
 		;;
 esac
 
