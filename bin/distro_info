@@ -467,12 +467,23 @@ get_virt()
     # TODO: check for openvz
 }
 
+# https://unix.stackexchange.com/questions/196166/how-to-find-out-if-a-system-uses-sysv-upstart-or-systemd-initsystem
+get_service_manager()
+{
+    [ -d /run/systemd/system ] && echo "systemd" && return
+    [ -d /usr/share/upstart ] && echo "upstart" && return
+    [ -d /etc/init.d ] && echo "sysvinit" && return
+    echo "(unknown)"
+}
+
+
 print_total_info()
 {
 cat <<EOF
 distro_info total information (run with -h to get help):
  Distro name and version (-e): $(print_name_version)
         Packaging system (-p): $(pkgtype)
+ Running service manager (-y): $(get_service_manager)
           Virtualization (-i): $(get_virt)
         CPU Architecture (-a): $(get_arch)
  CPU norm register size  (-b): $(get_bit_size)
@@ -500,6 +511,7 @@ case $1 in
 		echo " -o - print base OS name"
 		echo " -p [SystemName] - print type of the packaging system"
 		echo " -s [SystemName] - print name of distro for build system (like in the package release name)"
+		ecgi " -y - print running service manager"
 		echo " -v - print version of distro"
 		echo " -V - print the utility version"
 		echo "Run without args to print all information."
@@ -543,6 +555,9 @@ case $1 in
 		test -n "$2" && DISTRIB_ID="$2"
 		rpmvendor
 		exit 0
+		;;
+	-y)
+		get_service_manager
 		;;
 	-V)
 		echo "20191121"
