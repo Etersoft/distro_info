@@ -84,7 +84,7 @@ pkgtype()
 		debian|ubuntu|mint|runtu|mcst|astra) echo "deb" ;;
 		alt|asplinux|suse|mandriva|rosa|mandrake|pclinux|sled|sles)
 			echo "rpm" ;;
-		fedora|redhat|scientific|centos|rhel|goslinux)
+		fedora|redhat|scientific|centos|rhel|goslinux|amzn)
 			echo "rpm" ;;
 		*)  echo "rpm" ;;
 	esac
@@ -403,6 +403,12 @@ local DIST_BIT
 DIST_BIT="$(get_uname -m)"
 case "$DIST_BIT" in
     'amd64' | 'ia64' | 'x86_64' | 'ppc64')
+        DIST_BIT="64"
+        ;;
+    'aarch64')
+        DIST_BIT="64"
+        ;;
+    'e2k')
         DIST_BIT="64"
         ;;
 #    'pa_risc' | 'pa-risc') # Are some of these 64bit? Least not all...
