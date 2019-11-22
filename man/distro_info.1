@@ -5,22 +5,7 @@
 .\" This file has been put into the public domain.
 .\" You can do whatever you want with this file.
 .\"
-.TH EEPM 1 "November 2019" "Version 0.1"
-<------><------>echo " -a - print hardware architecture"
-<------><------>echo " -b - print size of arch bit (32/64)"
-<------><------>echo " -d - print distro name"
-<------><------>echo " -e - print full name of distro with version"
-<------><------>echo " -h - this help"
-<------><------>echo " -m - print system memory size (in MB)"
-<------><------>echo " -n [SystemName] - print vendor name (as _vendor macros in rpm)"
-<------><------>echo " -o - print base os name"
-<------><------>echo " -p [SystemName] - print type of the packaging system"
-<------><------>echo " -s [SystemName] - print name of distro for build system (like in the package release name)"
-<------><------>echo " -v - print version of distro"
-<------><------>echo " -V - print the utility version"
-<------><------>echo "Run without args to print all information."
-<------><------>exit 0
-
+.TH EEPM 1 "November 2019" "Version 1.1"
 
 .SH NAME
 distro_info \- get various info about a system and used distro
@@ -72,6 +57,9 @@ print type of the packaging system (deb, rpm)
 .TP
 .I -y
 print running service manager (systemd, sysvinit)
+.TP
+.I --pretty
+print name name of the distro
 .TP
 .I -v
 print version of the distro (f.i. 20.04 or p9)
