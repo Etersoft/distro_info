@@ -123,7 +123,7 @@ if distro altlinux-release ; then
 	elif has "ALT Linux 8." ; then DISTRIB_RELEASE="p8"
 	elif has "ALT .*8.[0-9]" ; then DISTRIB_RELEASE="p8"
 	elif has "ALT .*9.[0-9]" ; then DISTRIB_RELEASE="p9"
-	elif has "ALT p9 " ; then DISTRIB_RELEASE="p9"
+	elif has "ALT p9.* p9 " ; then DISTRIB_RELEASE="p9"
 	elif has "ALT 8 SP " ; then DISTRIB_RELEASE="c8"
 	elif has "ALT 9 SP " ; then DISTRIB_RELEASE="c9"
 	elif has "Simply Linux 6." ; then DISTRIB_RELEASE="p6"
