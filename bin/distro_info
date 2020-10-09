@@ -1,10 +1,12 @@
 #!/bin/sh
-# 2007-2019 (c) Vitaly Lipatov <lav@etersoft.ru>
-# 2007-2019 (c) Etersoft
-# 2007-2019 Public domain
+# 2007-2020 (c) Vitaly Lipatov <lav@etersoft.ru>
+# 2007-2020 (c) Etersoft
+# 2007-2020 Public domain
 
 # You can set ROOTDIR to root system dir
 #ROOTDIR=
+
+PROGVERSION="20201010"
 
 # TODO: check /etc/system-release
 
@@ -287,7 +289,7 @@ elif distro os-release ; then
 elif [ "$(uname)" = "FreeBSD" ] ; then
 	DISTRIB_ID="FreeBSD"
 	UNAME=$(uname -r)
-	DISTRIB_RELEASE=$(echo "$UNAME" | grep RELEASE | sed -e "s|\([0-9]\.[0-9]\)-RELEASE|\1|g")
+	DISTRIB_RELEASE=$(echo "$UNAME" | grep RELEASE | sed -e "s|\([0-9]\.[0-9]\)-RELEASE|\1|g") #"
 
 # fixme: can we detect by some file?
 elif [ "$(uname)" = "SunOS" ] ; then
@@ -430,8 +432,9 @@ echo "$DIST_BIT"
 }
 
 # TODO: check before calc
-get_memory_size() {
-    local detected=0
+get_memory_size()
+{
+    local detected=""
     local DIST_OS="$(get_base_os_name)"
     case "$DIST_OS" in
         macosx)
@@ -443,9 +446,14 @@ get_memory_size() {
         linux)
             [ -r /proc/meminfo ] && detected=$((`cat /proc/meminfo | grep MemTotal | awk '{print $2}'`/1024))
             ;;
+        solaris)
+            detected=$(prtconf | grep Memory | sed -e "s|Memory size: \([0-9][0-9]*\) Megabyte.*|\1|")
+            ;;
+#        *)
+#            fatal "Unsupported OS $DIST_OS"
     esac
 
-    # Exit codes only support values between 0 and 255. So use stdout.
+    [ -n "$detected" ] || detected=0
     echo $detected
 }
 
@@ -525,7 +533,8 @@ print_pretty_name()
 print_total_info()
 {
 cat <<EOF
-distro_info total information (run with -h to get help):
+distro_info v$PROGVERSION : Copyright © 2007-2020 Etersoft
+==== Total system information:
 Pretty distro name (--pretty): $(print_pretty_name)
  Distro name and version (-e): $(print_name_version)
         Packaging system (-p): $(pkgtype)
@@ -538,13 +547,15 @@ Pretty distro name (--pretty): $(print_pretty_name)
             Base OS name (-o): $(get_base_os_name)
 Build system distro name (-s): $(pkgvendor)
 Build system vendor name (-n): $(rpmvendor)
+
+(run with -h to get help)
 EOF
 }
 
 
 case $1 in
 	-h)
-		echo "distro_info - distro name and version detection"
+		echo "distro_info v$PROGVERSION - distro information retriever"
 		echo "Usage: distro_info [options] [args]"
 		echo "Options:"
 		echo " -a - print hardware architecture"
@@ -615,7 +626,7 @@ case $1 in
 		get_service_manager
 		;;
 	-V)
-		echo "20191121"
+		echo "$PROGVERSION"
 		exit 0
 		;;
 	-e)
