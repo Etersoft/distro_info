@@ -9,12 +9,17 @@ or -h to get all supported options.
 
 ```
 $ ./distro_info
-distro_info total information (run with -h to get help):
+distro_info v20201010 : Copyright © 2007-2020 Etersoft
+==== Total system information:
+Pretty distro name (--pretty): ALT Sisyphus Sisyphus (unstable) (sisyphus)
  Distro name and version (-e): ALTLinux/Sisyphus
         Packaging system (-p): rpm
+ Running service manager (-y): sysvinit
+          Virtualization (-i): kvm
+               CPU Cores (-c): 16
         CPU Architecture (-a): x86_64
  CPU norm register size  (-b): 64
- System memory size (MB) (-m): 19490
+ System memory size (MB) (-m): 23659
             Base OS name (-o): linux
 Build system distro name (-s): alt
 Build system vendor name (-n): alt
