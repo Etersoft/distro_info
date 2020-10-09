@@ -454,6 +454,32 @@ print_name_version()
     [ -n "$DISTRIB_RELEASE" ] && echo $DISTRIB_ID/$DISTRIB_RELEASE || echo $DISTRIB_ID
 }
 
+get_core_count()
+{
+    local detected=""
+    local DIST_OS="$(get_base_os_name)"
+    case "$DIST_OS" in
+        macos|freebsd)
+            detected=$(sysctl hw.ncpu | awk '{print $2}')
+            ;;
+        linux)
+            detected=$(grep -c "^processor" /proc/cpuinfo)
+            ;;
+        solaris)
+            detected=$(prtconf | grep -c 'cpu[^s]')
+            ;;
+        aix)
+            detected=$(lsdev -Cc processor -S A | wc -l)
+            ;;
+#        *)
+#            fatal "Unsupported OS $DIST_OS"
+    esac
+
+    [ -n "$detected" ] || detected=0
+    echo $detected
+}
+
+
 get_virt()
 {
     local VIRT
@@ -505,6 +531,7 @@ Pretty distro name (--pretty): $(print_pretty_name)
         Packaging system (-p): $(pkgtype)
  Running service manager (-y): $(get_service_manager)
           Virtualization (-i): $(get_virt)
+               CPU Cores (-c): $(get_core_count)
         CPU Architecture (-a): $(get_arch)
  CPU norm register size  (-b): $(get_bit_size)
  System memory size (MB) (-m): $(get_memory_size)
@@ -522,6 +549,7 @@ case $1 in
 		echo "Options:"
 		echo " -a - print hardware architecture"
 		echo " -b - print size of arch bit (32/64)"
+		echo " -c - print number of CPU cores"
 		echo " -d - print distro name"
 		echo " -e - print full name of distro with version"
 		echo " -i - print virtualization type"
@@ -555,6 +583,9 @@ case $1 in
 		;;
 	-b)
 		get_bit_size
+		;;
+	-c)
+		get_core_count
 		;;
 	-i)
 		get_virt
