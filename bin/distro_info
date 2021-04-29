@@ -196,7 +196,7 @@ normalize_name()
 
 # Default values
 PRETTY_NAME=""
-DISTRIB_ID="Generic"
+DISTRIB_ID=""
 DISTRIB_RELEASE=""
 DISTRIB_CODENAME=""
 
@@ -409,6 +409,8 @@ elif [ "$(uname -o 2>/dev/null)" = "Cygwin" ] ; then
         DISTRIB_ID="Cygwin"
         DISTRIB_RELEASE="all"
 fi
+
+[ -n "$DISTRIB_ID" ] || DISTRIB_ID="Generic"
 
 if [ -z "$PRETTY_NAME" ] ; then
 	PRETTY_NAME="$DISTRIB_ID $DISTRIB_RELEASE"
